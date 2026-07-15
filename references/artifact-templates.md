@@ -382,6 +382,7 @@ Use the detailed review requirements in `references/review-and-retrospective.md`
 # Final Review
 
 - Reviewer and independence status:
+- Reviewer model / agent:
 - Artifacts reviewed:
 - Execution / recomputation performed:
 - Trigger: pre-report adversarial review / post-report consistency check / both
@@ -398,7 +399,13 @@ Use the detailed review requirements in `references/review-and-retrospective.md`
 | Recommendation was actively challenged |  |  |
 | Operational output and metrics match the business action |  |  |
 | Capacity-constrained binary outputs were not treated as ranked outputs |  |  |
+| Final claims are supported by current upstream artifacts, not stale notes or agent memory |  |  |
 | Critical / High issues resolved before final reports |  |  |
+
+## Review Repair Loop
+
+| Review finding | Analysis state changed? | Artifacts reopened / superseded | Correction made | Rechecked? |
+|---|---|---|---|---|
 
 ## Claim-To-Evidence Check
 

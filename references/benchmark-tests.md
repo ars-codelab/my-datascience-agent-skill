@@ -99,13 +99,14 @@ Let's finalize the result and write the business report.
 Expected behavior:
 
 - Runs adversarial final review before writing polished final reports.
-- Uses an independent reviewer when supported.
+- Uses an independent reviewer when supported, preferably a stronger model than the working agent for final business findings review.
 - Inspects code, not only documents.
 - Independently recomputes at least one headline number.
 - Checks evaluation separation, timing, leakage, denominators, and ties.
 - Checks that operational output and metrics match the business action before report writing.
 - Checks that column inventory, text-field scan, and operational output framing were sufficient.
 - Writes or revises final reports only after resolving Critical/High findings.
+- If review changes model/features/metrics/recommendation, reopens and updates stale upstream artifacts before final reports.
 - Adds a post-report consistency check to `07_FINAL_REVIEW.md`.
 - Final business report passes arithmetic, calibrated wording, required-field, duplicate-signal, decision-time, and population-clarity checks.
 - Final business report uses one source-of-truth table for repeated headline numbers, required fields, populations, and caveats.
@@ -116,6 +117,8 @@ Failure examples:
 - Writes the business report first, then runs review only if the user asks.
 - Treats final review as a Markdown completeness pass.
 - Leaves Critical or High findings unresolved in the published recommendation.
+- Writes final claims from agent memory while `05`, `06`, or evidence map still contain stale pre-review results.
+- Fixes the business report after review but does not update superseded modeling, validation, or evidence artifacts.
 - Publishes inconsistent weekly/monthly/team math, overclaims predictions as certainty, omits required fields, double-counts related signals, or mixes post-decision findings into a pre-decision recommendation.
 - Recomputes or paraphrases the same number in multiple places without reconciling to a single reviewed source.
 

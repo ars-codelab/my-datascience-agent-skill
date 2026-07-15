@@ -2,7 +2,7 @@
 
 ## Independent Review
 
-Use a fresh agent or model call when the harness supports it. Provide raw artifacts and the review task. Do not provide the main agent's private reasoning, intended answer, or a conclusion-biased summary.
+Use a fresh agent or model call when the harness supports it. Prefer the strongest suitable available model for final business findings review, especially when the working agent used a cheaper or faster model. Provide raw artifacts and the review task. Do not provide the main agent's private reasoning, intended answer, or a conclusion-biased summary.
 
 The reviewer must behave as a falsifier, not a document-completeness checker.
 
@@ -29,6 +29,19 @@ After final reports are drafted, perform a short consistency check: business rep
 
 Reviewing only Markdown consistency is insufficient.
 
+### Review Repair Loop
+
+Return review findings to the working agent. The working agent must resolve Critical and High findings before publication.
+
+If review changes the analysis state, do not patch only the final report. Reopen the affected upstream artifacts, mark stale versions `Superseded`, and update the artifact chain before final reporting:
+
+- `05_MODELING_OR_ANALYSIS_NOTES.md` for changed models, features, scores, metrics, or tie behavior.
+- `06_VALIDATION_AND_RISKS.md` for changed claim strength, leakage, robustness, limitations, or recommendation readiness.
+- `reports/evidence_map.md` or the source-of-truth table for changed headline values, field lists, populations, caveats, or recommendation wording.
+- `07_FINAL_REVIEW.md` with what was found, what changed, and which artifacts were updated.
+
+Then rerun the relevant review checks. A report may not cite a result that appears only in the agent's memory or final prose.
+
 ### Review Status
 
 - `Approved`: independent executable review found no unresolved Critical or High issue.
@@ -41,7 +54,7 @@ For Expert Strict or high-stakes work, the fallback status blocks publication un
 ### Suggested Review Prompt
 
 ```text
-Act as an independent data science reviewer. Review this analysis from first principles and try to falsify its recommendation before final reports are written. Read the signed-off business and data definitions, inspect the code and outputs, verify development/test separation, independently recompute at least one headline metric, check timing and leakage, confirm methods are evaluated according to their actual operational output and capacity constraints, inspect cutoff ties and hidden sorting, check that the column inventory and text-field scan were sufficient, and trace every major claim through evidence. Report findings by severity and return Approved, Approved after fixes, Blocked, or Single-agent fallback - not independently verified.
+Act as an independent data science reviewer. Review this analysis from first principles and try to falsify its recommendation before final reports are written. Read the signed-off business and data definitions, inspect the code and outputs, verify development/test separation, independently recompute at least one headline metric, check timing and leakage, confirm methods are evaluated according to their actual operational output and capacity constraints, inspect cutoff ties and hidden sorting, check that the column inventory and text-field scan were sufficient, and trace every major claim through evidence. Specifically check whether final claims are supported by current upstream artifacts rather than stale notes or agent memory. Report findings by severity and return Approved, Approved after fixes, Blocked, or Single-agent fallback - not independently verified.
 ```
 
 ## Retrospective

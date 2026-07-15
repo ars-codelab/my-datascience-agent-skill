@@ -256,11 +256,13 @@ Never mark the user as reviewer or an artifact as approved unless the user expli
 
 ## Final Review
 
-Run final review before writing polished final reports whenever the user asks to finalize, publish, wrap up, hand off, or write the business report. If the project provides an `adversarial_test` script, prompt, checklist, or tool, run it as part of this step. Use a fresh independent agent or model call when supported. Give it the analysis folder and review task, not the main agent's reasoning or conclusions. Require it to inspect code and evidence, independently recompute at least one headline result, test development/evaluation separation, inspect timing and leakage, check cutoff ties, and attempt to falsify the recommendation.
+Run final review before writing polished final reports whenever the user asks to finalize, publish, wrap up, hand off, or write the business report. If the harness supports multiple agents or models, spawn a fresh independent reviewer using the strongest suitable available model, especially for the business findings document and evidence trail. If the project provides an `adversarial_test` script, prompt, checklist, or tool, run it as part of this step. Give the reviewer the analysis folder and review task, not the main agent's reasoning or conclusions. Require it to inspect code and evidence, independently recompute at least one headline result, test development/evaluation separation, inspect timing and leakage, check cutoff ties, and attempt to falsify the recommendation.
 
 If independence or executable verification is unavailable, label the review `Single-agent fallback - not independently verified`. In Expert Strict or high-stakes work, this blocks publication unless an expert explicitly accepts the limitation.
 
-After final reports are drafted, update `07_FINAL_REVIEW.md` with a short report-consistency check confirming that business and technical claims still match the reviewed evidence. Check arithmetic, denominator/baseline consistency, decision-time-safe wording, required input fields, duplicate or overlapping signals, and whether validation population differs from the deployment population.
+Review findings must be returned to the working agent and resolved before publication. If review changes the model, features, data, metrics, recommendation, or interpretation, reopen the affected upstream artifacts (`05`, `06`, evidence map, and source-of-truth table as applicable), mark stale artifacts `Superseded`, update them, and rerun the relevant review checks before writing or approving final reports.
+
+After final reports are drafted, update `07_FINAL_REVIEW.md` with a short report-consistency check confirming that business and technical claims still match the reviewed evidence. Check arithmetic, denominator/baseline consistency, artifact freshness, decision-time-safe wording, required input fields, duplicate or overlapping signals, and whether validation population differs from the deployment population.
 
 ## Completion
 
