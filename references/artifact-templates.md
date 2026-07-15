@@ -161,7 +161,21 @@ Known heuristics, prior models, must-include signals, and forbidden signals:
 
 Review business-named text fields such as names, titles, descriptions, categories, source labels, and free-text tags.
 
-| Field | Patterns checked | Useful signal found? | Decision-time status | Next action |
+| Field | Semantic patterns checked | Structural patterns checked | Useful signal found? | Decision-time status | Next action |
+|---|---|---|---|---|---|
+
+Structural checks include length buckets, character scripts, mixed scripts, full-width/half-width, special characters, punctuation, parentheses/brackets, casing, digit ratio, and prefixes/suffixes.
+
+## Categorical Value Profiling
+
+For low-cardinality categorical fields, profile value-level target or outcome rates before collapsing to binary. Use training data only for target-dependent summaries.
+
+| Field | Unique values | Value-level pattern | Collapse decision | Risk |
+|---|---:|---|---|---|
+
+## Type And Date Sanity Checks
+
+| Field | Intended type | Parsed range / distribution | Suspicious values? | Decision |
 |---|---|---|---|---|
 
 ## Data Quality And Fitness
@@ -216,6 +230,8 @@ Target: 600-900 words.
 | Operational capacity and cutoffs |  |
 | Ranking requirement | Required / not required / unclear, with reason |
 | Tie policy |  |
+| Score spread and tie-density acceptance rule |  |
+| Correlated or overlapping signal policy |  |
 | Interpretability / implementation constraints |  |
 
 ## Population, Target, And Timing
@@ -338,6 +354,11 @@ Separate observations, inferences, and recommendations.
 | Output types are evaluated according to how they can actually be used |  |  |
 | Signal inventory reviewed all columns before feature narrowing |  |  |
 | Text-to-scan fields were checked or explicitly ruled out |  |  |
+| Low-cardinality categorical fields were profiled at value level before collapsing |  |  |
+| Candidate signal timing was verified or marked investigate |  |  |
+| Parsed date fields passed plausible range checks |  |  |
+| Scorecard spread and tie density are operationally usable |  |  |
+| Correlated or overlapping scorecard signals are justified or removed |  |  |
 | Cohorts, denominators, periods, and baselines match |  |  |
 
 ## Leakage, Causality, Robustness, And Bias

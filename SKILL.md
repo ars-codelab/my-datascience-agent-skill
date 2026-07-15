@@ -200,9 +200,12 @@ Capacity-constrained prioritization normally needs an ordering. If a proposed me
 
 - Before selecting features, scan all column names, types, missingness, unique counts, and sample values.
 - Treat business-named text fields such as names, titles, descriptions, source names, categories, or free-text tags as potential signal sources until reviewed.
-- For text-to-scan fields, check common tokens, keyword families, language/script patterns, prefixes/suffixes, and obvious business terms. Ask the user about domain-specific keywords when needed.
-- Maintain separate inventories for decision-time-safe, post-decision, outcome/proxy, identifier, and investigate fields.
+- For text-to-scan fields, check common tokens, keyword families, language/script patterns, structural patterns, prefixes/suffixes, and obvious business terms. Structural patterns include length buckets, character scripts, mixed scripts, special characters, punctuation, parentheses/brackets, casing, and digit ratio.
+- For categorical fields with small cardinality, profile value-level outcome or target rates before collapsing to a binary indicator. Use training data only for target-dependent summaries.
+- Maintain separate inventories for decision-time-safe, post-decision, outcome/proxy, identifier, and investigate fields. Treat unknown field-population timing as `investigate`, not safe.
+- After parsing dates, verify plausible date ranges and null changes. Values such as epoch dates, far-future years, or mass conversion of numeric counts to dates require manual review.
 - If using logistic regression or another interpretable model to create a scorecard, prefer coefficient-scaled integer points over manually weighted deviations unless there is a clear reason not to.
+- Before accepting a scorecard, check score spread, tie density at operating cutoffs, and whether weak or contradictory signals are redundant with stronger correlated signals.
 
 ### Ranking And Ties
 

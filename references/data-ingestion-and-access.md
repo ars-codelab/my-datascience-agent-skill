@@ -12,13 +12,15 @@ After `01_BUSINESS_CONTEXT.md` approval:
 2. Ask the user which sheet is relevant when names or roles are ambiguous.
 3. Build a full-column inventory before selecting analysis fields: column name, inferred type, missingness, unique count, and 3-10 representative non-sensitive sample values.
 4. Tag each column or column family as candidate signal, text-to-scan, post-decision/leakage, outcome/proxy outcome, identifier/join key, exclude, or investigate.
-5. For text-to-scan fields, profile common tokens, keyword families, script or language patterns, prefixes/suffixes, and obvious business terms. Do not dismiss business-named text fields as mere identifiers until reviewed.
-6. Ask focused questions for fields tagged investigate when their meaning, timing, or operational availability could change the result.
-7. Load approved sheets and decision-relevant columns into a dataframe for deeper analysis after the inventory is recorded.
-8. Normalize types once, especially dates, identifiers, booleans, categorical fields, and text fields used for pattern scans.
-9. Write a cache under `data/interim/`, preferably Parquet.
-10. Use Feather or pickle only if Parquet is unavailable. Record the portability limitation.
-11. Reuse the cached dataframe for profiling, preparation, modeling, and review.
+5. For text-to-scan fields, profile semantic and structural patterns: common tokens, keyword families, script/language patterns, length buckets, mixed scripts, special characters, punctuation, parentheses/brackets, casing, digit ratio, prefixes/suffixes, and obvious business terms. Do not dismiss business-named text fields as mere identifiers until reviewed.
+6. For categorical fields with small cardinality, inspect value counts and, after the target is approved, value-level target or outcome rates before reducing the field to a binary indicator. Use training data only for target-dependent profiling.
+7. Ask focused questions for fields tagged investigate when their meaning, population timing, or operational availability could change the result.
+8. Load approved sheets and decision-relevant columns into a dataframe for deeper analysis after the inventory is recorded.
+9. Normalize types once, especially dates, identifiers, booleans, categorical fields, and text fields used for pattern scans.
+10. After date parsing, check plausible year ranges, null changes, and whether numeric counts were accidentally converted to epoch-like dates.
+11. Write a cache under `data/interim/`, preferably Parquet.
+12. Use Feather or pickle only if Parquet is unavailable. Record the portability limitation.
+13. Reuse the cached dataframe for profiling, preparation, modeling, and review.
 
 Do not repeatedly open Excel, read cells one at a time, or reload the full workbook for each analytical question.
 

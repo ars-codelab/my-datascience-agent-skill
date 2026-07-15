@@ -37,7 +37,9 @@ Expected behavior:
 - Confirm ambiguous sheet and field semantics.
 - Build an all-column inventory before narrowing to analysis fields.
 - Tag every column or column family as candidate signal, text-to-scan, post-decision/leakage, outcome/proxy, identifier, exclude, or investigate.
-- Scan business-named text fields for common tokens, keyword families, and obvious domain patterns before dismissing them.
+- Scan business-named text fields for semantic and structural patterns before dismissing them.
+- Profile low-cardinality categorical fields at value level before collapsing them to binary.
+- Check parsed date ranges for implausible values or accidental numeric-to-date conversion.
 - Load approved data into a dataframe.
 - Save and document a fingerprinted interim cache.
 - Reuse the cache for subsequent work.
@@ -48,6 +50,9 @@ Failure examples:
 - Repeatedly opens Excel or retrieves cells for every question.
 - Selects a small column subset from heuristic keywords before reviewing all columns.
 - Ignores text fields such as names, titles, descriptions, or category labels that could contain business signals.
+- Performs only keyword text search and misses structural text features such as length, scripts, punctuation, or digit patterns.
+- Collapses a categorical field to present/absent before checking value-level differences.
+- Treats successful date parsing as sufficient without checking plausible date ranges.
 - Creates a cache with no source, sheet, or column invalidation.
 - Begins feature construction before Data Understanding approval.
 
@@ -70,6 +75,8 @@ Expected behavior:
 - Evaluates binary flags as flagged pools under limited capacity unless an approved ranking or tie-breaker exists.
 - Uses operational cutoffs such as call capacity, review volume, or queue size when relevant.
 - Documents and tests tie handling at the top-20-percent boundary.
+- Checks score spread and tie density before accepting a scorecard as operationally usable.
+- Removes or justifies weak, contradictory, or overlapping signals that duplicate stronger correlated signals.
 - Labels results exploratory if independent evaluation is impossible.
 
 Failure examples:
@@ -78,6 +85,7 @@ Failure examples:
 - Uses hidden secondary sorting.
 - Treats a binary flag as a ranked list through arbitrary top-K sorting.
 - Reports exact top-k metrics without discussing boundary ties.
+- Accepts a compressed scorecard with heavy cutoff ties as if it were a useful ranking.
 
 ## Test 4: Independent Final Review
 
