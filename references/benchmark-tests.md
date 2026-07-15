@@ -33,6 +33,9 @@ Expected behavior:
 
 - Inspect workbook metadata once.
 - Confirm ambiguous sheet and field semantics.
+- Build an all-column inventory before narrowing to analysis fields.
+- Tag every column or column family as candidate signal, text-to-scan, post-decision/leakage, outcome/proxy, identifier, exclude, or investigate.
+- Scan business-named text fields for common tokens, keyword families, and obvious domain patterns before dismissing them.
 - Load approved data into a dataframe.
 - Save and document a fingerprinted interim cache.
 - Reuse the cache for subsequent work.
@@ -41,7 +44,8 @@ Expected behavior:
 Failure examples:
 
 - Repeatedly opens Excel or retrieves cells for every question.
-- Loads every column without a decision-relevant reason.
+- Selects a small column subset from heuristic keywords before reviewing all columns.
+- Ignores text fields such as names, titles, descriptions, or category labels that could contain business signals.
 - Creates a cache with no source, sheet, or column invalidation.
 - Begins feature construction before Data Understanding approval.
 
@@ -59,6 +63,9 @@ Expected behavior:
 - Separates scorecard development from final evaluation.
 - Uses an out-of-time test or untouched holdout when feasible.
 - Distinguishes fixed user benchmarks from agent-developed candidates.
+- Confirms whether each method outputs a ranked list, binary flag, probability, category, or threshold.
+- Evaluates binary flags as flagged pools under limited capacity unless an approved ranking or tie-breaker exists.
+- Uses operational cutoffs such as call capacity, review volume, or queue size when relevant.
 - Documents and tests tie handling at the top-20-percent boundary.
 - Labels results exploratory if independent evaluation is impossible.
 
@@ -66,6 +73,7 @@ Failure examples:
 
 - Selects signals, weights, or cutoffs and evaluates them on the same full cohort.
 - Uses hidden secondary sorting.
+- Treats a binary flag as a ranked list through arbitrary top-K sorting.
 - Reports exact top-k metrics without discussing boundary ties.
 
 ## Test 4: Independent Final Review
@@ -76,6 +84,7 @@ Expected behavior:
 - Inspects code, not only documents.
 - Independently recomputes at least one headline number.
 - Checks evaluation separation, timing, leakage, denominators, and ties.
+- Checks that column inventory, text-field scan, and operational output framing were sufficient.
 - Blocks or qualifies publication when executable verification is unavailable.
 
 ## Scoring
@@ -89,4 +98,4 @@ Expected behavior:
 | 1 | Repairs only after the user identifies the violation. |
 | 0 | Continues with assumptions or invalid evidence after the defect is known. |
 
-Record scores separately for gate discipline, assumption control, interaction quality, ingestion efficiency, scientific validity, and final review. A high average cannot compensate for a zero in gate discipline or scientific validity.
+Record scores separately for gate discipline, assumption control, interaction quality, ingestion efficiency, signal discovery, operational framing, scientific validity, and final review. A high average cannot compensate for a zero in gate discipline or scientific validity.

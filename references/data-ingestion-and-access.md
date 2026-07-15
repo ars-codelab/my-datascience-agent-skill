@@ -10,11 +10,15 @@ After `01_BUSINESS_CONTEXT.md` approval:
 
 1. Inspect workbook metadata once: file size, modification time, sheet names, approximate dimensions, and headers.
 2. Ask the user which sheet is relevant when names or roles are ambiguous.
-3. Load only approved sheets and decision-relevant columns into a dataframe during Data Understanding.
-4. Normalize types once, especially dates, identifiers, booleans, and categorical fields.
-5. Write a cache under `data/interim/`, preferably Parquet.
-6. Use Feather or pickle only if Parquet is unavailable. Record the portability limitation.
-7. Reuse the cached dataframe for profiling, preparation, modeling, and review.
+3. Build a full-column inventory before selecting analysis fields: column name, inferred type, missingness, unique count, and 3-10 representative non-sensitive sample values.
+4. Tag each column or column family as candidate signal, text-to-scan, post-decision/leakage, outcome/proxy outcome, identifier/join key, exclude, or investigate.
+5. For text-to-scan fields, profile common tokens, keyword families, script or language patterns, prefixes/suffixes, and obvious business terms. Do not dismiss business-named text fields as mere identifiers until reviewed.
+6. Ask focused questions for fields tagged investigate when their meaning, timing, or operational availability could change the result.
+7. Load approved sheets and decision-relevant columns into a dataframe for deeper analysis after the inventory is recorded.
+8. Normalize types once, especially dates, identifiers, booleans, categorical fields, and text fields used for pattern scans.
+9. Write a cache under `data/interim/`, preferably Parquet.
+10. Use Feather or pickle only if Parquet is unavailable. Record the portability limitation.
+11. Reuse the cached dataframe for profiling, preparation, modeling, and review.
 
 Do not repeatedly open Excel, read cells one at a time, or reload the full workbook for each analytical question.
 
@@ -28,6 +32,7 @@ Define cache identity from:
 - Selected columns.
 - Parsing and type-normalization version.
 - Material transformation version when caching prepared data.
+- Inventory version when column tags or text-scan rules change.
 
 Invalidate the cache if any identity component changes or required columns are absent.
 

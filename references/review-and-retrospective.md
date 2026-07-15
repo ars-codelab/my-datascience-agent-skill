@@ -15,9 +15,12 @@ The reviewer must behave as a falsifier, not a document-completeness checker.
 5. Independently recompute at least one headline metric from analysis-ready data or lower-level outputs.
 6. Check decision-time availability, delayed fields, fallback dates, outcome maturity, and leakage.
 7. Check denominators, cohorts, periods, baselines, missing-value treatment, joins, and deduplication.
-8. Inspect ranking ties and any secondary sorting logic.
-9. Attempt at least one plausible alternative explanation, sensitivity, or counterexample.
-10. Verify that every material claim maps to evidence and that reports expose unresolved risks.
+8. Verify that each method is evaluated according to its actual operational output: ranked list, binary flag, probability, category, or narrative recommendation.
+9. For binary flags used under limited capacity, compare random-from-flagged-pool or an approved tie-breaker; do not accept hidden top-K sorting.
+10. Inspect ranking ties and any secondary sorting logic.
+11. Confirm the data understanding artifact includes a full-column inventory and that important business-named text fields were scanned or explicitly ruled out.
+12. Attempt at least one plausible alternative explanation, sensitivity, or counterexample.
+13. Verify that every material claim maps to evidence and that reports expose unresolved risks.
 
 Reviewing only Markdown consistency is insufficient.
 
@@ -33,7 +36,7 @@ For Expert Strict or high-stakes work, the fallback status blocks publication un
 ### Suggested Review Prompt
 
 ```text
-Act as an independent data science reviewer. Review this analysis from first principles and try to falsify its recommendation. Read the signed-off business and data definitions, inspect the code and outputs, verify development/test separation, independently recompute at least one headline metric, check timing and leakage, inspect cutoff ties and hidden sorting, and trace every major claim through the evidence map. Report findings by severity and return Approved, Approved after fixes, Blocked, or Single-agent fallback - not independently verified.
+Act as an independent data science reviewer. Review this analysis from first principles and try to falsify its recommendation. Read the signed-off business and data definitions, inspect the code and outputs, verify development/test separation, independently recompute at least one headline metric, check timing and leakage, confirm methods are evaluated according to their actual operational output, inspect cutoff ties and hidden sorting, check that the column inventory and text-field scan were sufficient, and trace every major claim through the evidence map. Report findings by severity and return Approved, Approved after fixes, Blocked, or Single-agent fallback - not independently verified.
 ```
 
 ## Retrospective

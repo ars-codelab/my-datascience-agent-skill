@@ -95,11 +95,13 @@ Expert modes may use a compact assumption register, but must still stop for unre
 Stop and ask when approved context does not resolve:
 
 - The business decision, user, action, current process, baseline, capacity, or cost of errors.
+- The form of the operational output: ranked list, binary flag, probability score, rule, threshold, forecast, recommendation, or narrative advice.
 - Decision timestamp, event timestamp, outcome window, maturity window, or fallback date logic.
 - Signals genuinely available at decision time, including delayed and backfilled data.
 - Target, KPI, success event, unit of analysis, population, exclusions, or deduplication meaning.
 - Multiple plausible date, status, identifier, target, or value fields.
 - Whether the work is descriptive, predictive, causal, or used to automate a decision.
+- Any existing current rule, prior model, SOP, or expert-accepted comparator that is allowed for this run. In blind benchmark mode, do not ask for or use the hidden reference answer until retrospective/evaluation.
 
 For time-dependent prediction or prioritization, explicitly confirm the decision timestamp, event definition, available signals, late-arriving-data policy, outcome window, and observation maturity.
 
@@ -123,8 +125,8 @@ Follow this order unless the user requests a narrower review-only task.
 | Step | Action | Artifact | Gate |
 |---|---|---|---|
 | 0 | Create project structure, choose mode, log request, and search approved memory. | `00_PROJECT_LOG.md` | None |
-| 1 | Clarify decision, intended use, workflow, KPI, baseline, scope, incentives, and constraints. Do not inspect data beyond listing supplied files. | `01_BUSINESS_CONTEXT.md` | Explicit sign-off |
-| 2 | Inspect approved data, confirm semantics and timing, load tabular inputs efficiently, profile relevant fields, and assess fitness. | `02_DATA_UNDERSTANDING.md` | Explicit sign-off |
+| 1 | Clarify decision, intended use, operational output, workflow, KPI, baseline, evaluation mode, scope, incentives, and constraints. Do not inspect data beyond listing supplied files. | `01_BUSINESS_CONTEXT.md` | Explicit sign-off |
+| 2 | Inspect approved data, inventory all columns before narrowing, confirm semantics and timing, load tabular inputs efficiently, profile relevant fields, and assess fitness. | `02_DATA_UNDERSTANDING.md` | Explicit sign-off |
 | 3 | Define method, baselines, metrics, validation, signal policy, and stop criteria. | `03_ANALYSIS_PLAN.md` | Explicit sign-off |
 | 4 | Prepare data and document row impact, joins, deduplication, outcomes, and features. | `04_DATA_PREPARATION.md` | Conditional by mode/risk |
 | 5 | Run the approved analysis and record methods, parameters, results, and errors. | `05_MODELING_OR_ANALYSIS_NOTES.md` | Conditional by mode/risk |
@@ -140,11 +142,13 @@ After `01_BUSINESS_CONTEXT.md` approval, follow the detailed ingestion reference
 For Excel:
 
 1. Inspect workbook metadata once.
-2. Load the approved sheet and required columns into pandas, Polars, DuckDB, R, or an equivalent dataframe engine.
-3. Save a fingerprinted cache under `data/interim/`, preferably Parquet.
-4. Reuse the cache instead of repeatedly parsing Excel or reading cells.
-5. Invalidate the cache when the source, sheet, selected columns, or transformation logic changes.
-6. Keep the source workbook unchanged.
+2. Load column names and lightweight metadata for all columns before selecting analysis fields.
+3. Tag every column as candidate signal, text-to-scan, post-decision, identifier, outcome, exclude, or investigate.
+4. Load the approved sheet and required columns into pandas, Polars, DuckDB, R, or an equivalent dataframe engine.
+5. Save a fingerprinted cache under `data/interim/`, preferably Parquet.
+6. Reuse the cache instead of repeatedly parsing Excel or reading cells.
+7. Invalidate the cache when the source, sheet, selected columns, or transformation logic changes.
+8. Keep the source workbook unchanged.
 
 Record the source, sheet, dataframe engine, loaded columns, row count, cache path, fingerprint, and invalidation rule in `02_DATA_UNDERSTANDING.md`.
 
@@ -174,6 +178,8 @@ Include this compact contract in `03_ANALYSIS_PLAN.md`:
 
 Create the signal inventory independently from approved decision-time-safe fields, prior analyses, and business heuristics. Ask the user about ambiguous semantics and known omissions; do not require the user to design the model.
 
+For prioritization, triage, lead scoring, or queueing work, document whether each candidate method outputs a ranked list, binary flag, probability, or category. Evaluate each method in the way it can actually be used. Do not give a binary flag artificial ranking power through hidden tie-breaking.
+
 ### Honest Evaluation
 
 - Treat a fixed user-provided rule as a benchmark.
@@ -182,6 +188,15 @@ Create the signal inventory independently from approved decision-time-safe field
 - Prefer an out-of-time final test for business prediction. Otherwise use an untouched holdout or appropriate nested resampling.
 - Label results `Exploratory only` when independent evaluation is impossible.
 - Compare against the current process, a naive baseline, and simple alternatives.
+- Compare against any approved current rule, deployed process, or prior model that is in scope for this run. In blind benchmark mode, produce the independent answer first and compare with the hidden reference only during retrospective or external evaluation.
+
+### Signal Discovery
+
+- Before selecting features, scan all column names, types, missingness, unique counts, and sample values.
+- Treat business-named text fields such as names, titles, descriptions, source names, categories, or free-text tags as potential signal sources until reviewed.
+- For text-to-scan fields, check common tokens, keyword families, language/script patterns, prefixes/suffixes, and obvious business terms. Ask the user about domain-specific keywords when needed.
+- Maintain separate inventories for decision-time-safe, post-decision, outcome/proxy, identifier, and investigate fields.
+- If using logistic regression or another interpretable model to create a scorecard, prefer coefficient-scaled integer points over manually weighted deviations unless there is a clear reason not to.
 
 ### Ranking And Ties
 

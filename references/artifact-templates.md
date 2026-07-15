@@ -61,6 +61,9 @@ State the decision in 1-2 sentences.
 | Who uses the output? |  |
 | What action will they take? |  |
 | When will they use it? |  |
+| What operational output is needed? Ranked list / binary flag / probability / threshold / forecast / recommendation / other |  |
+| What capacity, cutoff, or operating volume matters? |  |
+| Is this production analysis or blind benchmark mode? |  |
 | What changes for a positive, negative, or uncertain result? |  |
 
 ## Problem And Current Baseline
@@ -72,6 +75,8 @@ Summarize the problem and how the decision is made today.
 - KPI or outcome:
 - Capacity or operating constraint:
 - Current workflow or SOP:
+- Current rule, model, manual process, or allowed comparator:
+- Hidden reference answer withheld for blind benchmark? Yes / No / Not applicable:
 - Incentive or behavior risk:
 - Decision cadence:
 
@@ -111,6 +116,21 @@ Target: 500-900 words plus essential tables. Keep broad profiling in `outputs/di
 | Concept or field | Meaning | Type | Timing | Missingness | Status |
 |---|---|---|---|---:|---|
 
+## Full Column Inventory Summary
+
+Create `outputs/diagnostics/column_inventory.*` when there are many columns.
+
+| Item | Value |
+|---|---:|
+| Total columns inspected |  |
+| Candidate signals |  |
+| Text-to-scan fields |  |
+| Post-decision or leakage fields |  |
+| Outcome or proxy outcome fields |  |
+| Identifier or join fields |  |
+| Excluded as irrelevant |  |
+| Still needs user clarification |  |
+
 ## Decision-Time And Date Semantics
 
 | Concept | Approved definition | Field(s) | Status |
@@ -129,10 +149,19 @@ Target: 500-900 words plus essential tables. Keep broad profiling in `outputs/di
 
 ## Candidate Signal Inventory
 
-| Signal family | Field(s) | Business meaning | Available at decision time? | Leakage risk | Status |
-|---|---|---|---|---|---|
+Tag every column or column family before feature selection.
+
+| Column or signal family | Field(s) | Business meaning | Tag | Available at decision time? | Leakage risk | Status |
+|---|---|---|---|---|---|---|
 
 Known heuristics, prior models, must-include signals, and forbidden signals:
+
+## Text Field Pattern Scan
+
+Review business-named text fields such as names, titles, descriptions, categories, source labels, and free-text tags.
+
+| Field | Patterns checked | Useful signal found? | Decision-time status | Next action |
+|---|---|---|---|---|
 
 ## Data Quality And Fitness
 
@@ -181,6 +210,8 @@ Target: 600-900 words.
 | Candidate signal universe |  |
 | Must-include / forbidden signals |  |
 | Development / validation / final test |  |
+| Operational output type | Ranked list / binary flag / probability / threshold / other |
+| Evaluation rule by output type | Ranked top-K / random-from-flagged-pool / calibrated threshold / other |
 | Operational capacity and cutoffs |  |
 | Tie policy |  |
 | Interpretability / implementation constraints |  |
@@ -194,6 +225,8 @@ Target: 600-900 words.
 
 | Candidate | Why included or rejected |
 |---|---|
+
+Include current rules, current process, naive baselines, simple alternatives, and allowed prior models. In blind benchmark mode, do not include hidden reference answers here.
 
 ## Metrics
 
@@ -298,6 +331,9 @@ Separate observations, inferences, and recommendations.
 | Final test was untouched during development |  |  |
 | Code matches documented model / rule |  |  |
 | Cutoffs and ties are handled transparently |  |  |
+| Output types are evaluated according to how they can actually be used |  |  |
+| Signal inventory reviewed all columns before feature narrowing |  |  |
+| Text-to-scan fields were checked or explicitly ruled out |  |  |
 | Cohorts, denominators, periods, and baselines match |  |  |
 
 ## Leakage, Causality, Robustness, And Bias
