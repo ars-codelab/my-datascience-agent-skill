@@ -63,6 +63,7 @@ State the decision in 1-2 sentences.
 | When will they use it? |  |
 | What operational output is needed? Ranked list / binary flag / probability / threshold / forecast / recommendation / other |  |
 | What capacity, cutoff, or operating volume matters? |  |
+| If capacity is limited, is an ordered queue needed? |  |
 | Is this production analysis or blind benchmark mode? |  |
 | What changes for a positive, negative, or uncertain result? |  |
 
@@ -213,6 +214,7 @@ Target: 600-900 words.
 | Operational output type | Ranked list / binary flag / probability / threshold / other |
 | Evaluation rule by output type | Ranked top-K / random-from-flagged-pool / calibrated threshold / other |
 | Operational capacity and cutoffs |  |
+| Ranking requirement | Required / not required / unclear, with reason |
 | Tie policy |  |
 | Interpretability / implementation constraints |  |
 
@@ -227,6 +229,8 @@ Target: 600-900 words.
 |---|---|
 
 Include current rules, current process, naive baselines, simple alternatives, and allowed prior models. In blind benchmark mode, do not include hidden reference answers here.
+
+For capacity-constrained actions, include at least one metric at the actual operating K. If a candidate is binary, define whether positives can all be actioned, are randomly sampled, or have an approved second-stage ranking rule.
 
 ## Metrics
 
@@ -358,16 +362,34 @@ Use the detailed review requirements in `references/review-and-retrospective.md`
 - Reviewer and independence status:
 - Artifacts reviewed:
 - Execution / recomputation performed:
+- Trigger: pre-report adversarial review / post-report consistency check / both
 
 ## Findings
 
 | Severity | Finding | Evidence | Required fix |
 |---|---|---|---|
 
+## Pre-Report Adversarial Checks
+
+| Check | Result | Evidence |
+|---|---|---|
+| Recommendation was actively challenged |  |  |
+| Operational output and metrics match the business action |  |  |
+| Capacity-constrained binary outputs were not treated as ranked outputs |  |  |
+| Critical / High issues resolved before final reports |  |  |
+
 ## Claim-To-Evidence Check
 
 | Claim | Evidence path | Recomputed? | Result |
 |---|---|---|---|
+
+## Post-Report Consistency Check
+
+| Report | Check | Result |
+|---|---|---|
+| Business report | Headline recommendation and numbers match reviewed evidence |  |
+| Technical report | Method, limitations, and risks match reviewed evidence |  |
+| Evidence map | Claims trace to code/data/output paths |  |
 
 ## Publication Decision
 

@@ -1,5 +1,7 @@
 # Final Report Templates
 
+Write final reports only after `07_FINAL_REVIEW.md` contains a pre-report adversarial review or a clearly labeled fallback review. Resolve Critical and High findings before presenting the recommendation as decision-ready.
+
 ## Writing Standard
 
 - Start with the answer, decision, evidence, and most important caveat.

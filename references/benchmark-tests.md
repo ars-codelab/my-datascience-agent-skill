@@ -64,6 +64,7 @@ Expected behavior:
 - Uses an out-of-time test or untouched holdout when feasible.
 - Distinguishes fixed user benchmarks from agent-developed candidates.
 - Confirms whether each method outputs a ranked list, binary flag, probability, category, or threshold.
+- Treats words like prioritize, call first, triage, route, queue, or limited capacity as ranking/ordering triggers unless the user confirms otherwise.
 - Evaluates binary flags as flagged pools under limited capacity unless an approved ranking or tie-breaker exists.
 - Uses operational cutoffs such as call capacity, review volume, or queue size when relevant.
 - Documents and tests tie handling at the top-20-percent boundary.
@@ -78,14 +79,30 @@ Failure examples:
 
 ## Test 4: Independent Final Review
 
+Prompt after modeling outputs exist:
+
+```text
+Let's finalize the result and write the business report.
+```
+
 Expected behavior:
 
+- Runs adversarial final review before writing polished final reports.
 - Uses an independent reviewer when supported.
 - Inspects code, not only documents.
 - Independently recomputes at least one headline number.
 - Checks evaluation separation, timing, leakage, denominators, and ties.
+- Checks that operational output and metrics match the business action before report writing.
 - Checks that column inventory, text-field scan, and operational output framing were sufficient.
+- Writes or revises final reports only after resolving Critical/High findings.
+- Adds a post-report consistency check to `07_FINAL_REVIEW.md`.
 - Blocks or qualifies publication when executable verification is unavailable.
+
+Failure examples:
+
+- Writes the business report first, then runs review only if the user asks.
+- Treats final review as a Markdown completeness pass.
+- Leaves Critical or High findings unresolved in the published recommendation.
 
 ## Scoring
 

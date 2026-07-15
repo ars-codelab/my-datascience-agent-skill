@@ -6,6 +6,8 @@ Use a fresh agent or model call when the harness supports it. Provide raw artifa
 
 The reviewer must behave as a falsifier, not a document-completeness checker.
 
+Run this review before polished final reports when the user says to finalize, publish, wrap up, hand off, or write the business report. If the project provides an `adversarial_test` script, prompt, checklist, or tool, run it during this step. Final reports should incorporate the review findings, not be the first place the recommendation is made.
+
 ### Required Review Work
 
 1. Read the signed-off business context, data understanding, and analysis plan first.
@@ -17,10 +19,13 @@ The reviewer must behave as a falsifier, not a document-completeness checker.
 7. Check denominators, cohorts, periods, baselines, missing-value treatment, joins, and deduplication.
 8. Verify that each method is evaluated according to its actual operational output: ranked list, binary flag, probability, category, or narrative recommendation.
 9. For binary flags used under limited capacity, compare random-from-flagged-pool or an approved tie-breaker; do not accept hidden top-K sorting.
-10. Inspect ranking ties and any secondary sorting logic.
-11. Confirm the data understanding artifact includes a full-column inventory and that important business-named text fields were scanned or explicitly ruled out.
-12. Attempt at least one plausible alternative explanation, sensitivity, or counterexample.
-13. Verify that every material claim maps to evidence and that reports expose unresolved risks.
+10. For capacity-constrained actions, verify that the primary metric matches the operating volume or queueing decision.
+11. Inspect ranking ties and any secondary sorting logic.
+12. Confirm the data understanding artifact includes a full-column inventory and that important business-named text fields were scanned or explicitly ruled out.
+13. Attempt at least one plausible alternative explanation, sensitivity, or counterexample.
+14. Verify that every material claim maps to evidence and that reports expose unresolved risks.
+
+After final reports are drafted, perform a short consistency check: business report, technical report, and evidence map must not introduce claims, numbers, or recommendations that were not reviewed or evidence-backed.
 
 Reviewing only Markdown consistency is insufficient.
 
@@ -36,7 +41,7 @@ For Expert Strict or high-stakes work, the fallback status blocks publication un
 ### Suggested Review Prompt
 
 ```text
-Act as an independent data science reviewer. Review this analysis from first principles and try to falsify its recommendation. Read the signed-off business and data definitions, inspect the code and outputs, verify development/test separation, independently recompute at least one headline metric, check timing and leakage, confirm methods are evaluated according to their actual operational output, inspect cutoff ties and hidden sorting, check that the column inventory and text-field scan were sufficient, and trace every major claim through the evidence map. Report findings by severity and return Approved, Approved after fixes, Blocked, or Single-agent fallback - not independently verified.
+Act as an independent data science reviewer. Review this analysis from first principles and try to falsify its recommendation before final reports are written. Read the signed-off business and data definitions, inspect the code and outputs, verify development/test separation, independently recompute at least one headline metric, check timing and leakage, confirm methods are evaluated according to their actual operational output and capacity constraints, inspect cutoff ties and hidden sorting, check that the column inventory and text-field scan were sufficient, and trace every major claim through evidence. Report findings by severity and return Approved, Approved after fixes, Blocked, or Single-agent fallback - not independently verified.
 ```
 
 ## Retrospective

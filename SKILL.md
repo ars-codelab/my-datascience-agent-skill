@@ -105,6 +105,8 @@ Stop and ask when approved context does not resolve:
 
 For time-dependent prediction or prioritization, explicitly confirm the decision timestamp, event definition, available signals, late-arriving-data policy, outcome window, and observation maturity.
 
+For capacity-constrained decisions, treat the operational form as a first-class requirement. Words like `prioritize`, `triage`, `queue`, `route`, `rank`, `call first`, `review first`, `select top`, or `limited capacity` usually imply a ranked list or ordered queue. Confirm this before choosing metrics. Do not let a classification metric such as F1 substitute for the business question unless a binary decision is truly the action.
+
 ## Artifact Concision
 
 Gated artifacts are decision surfaces, not data dumps.
@@ -131,8 +133,8 @@ Follow this order unless the user requests a narrower review-only task.
 | 4 | Prepare data and document row impact, joins, deduplication, outcomes, and features. | `04_DATA_PREPARATION.md` | Conditional by mode/risk |
 | 5 | Run the approved analysis and record methods, parameters, results, and errors. | `05_MODELING_OR_ANALYSIS_NOTES.md` | Conditional by mode/risk |
 | 6 | Audit leakage, causality, robustness, cohorts, baselines, and recommendation readiness. | `06_VALIDATION_AND_RISKS.md` | Required |
-| 7 | Write business report, technical report, and evidence map. | `reports/` | Final review follows |
-| 8 | Run a fresh independent or clearly labeled fallback review. | `07_FINAL_REVIEW.md` | Required before publication |
+| 7 | When the user says to finalize, publish, wrap up, hand off, or write the business report, run a pre-report adversarial review first. Use an independent reviewer when supported; otherwise use the labeled fallback. | `07_FINAL_REVIEW.md` | Required before final reports |
+| 8 | Write business report, technical report, and evidence map after resolving Critical/High review findings. Update review with a report-consistency check. | `reports/` and `07_FINAL_REVIEW.md` | Required before publication |
 | 9 | Compare the result with expectations and capture reusable process learning. | `08_RETROSPECTIVE.md` | After decision/publication |
 
 ## Efficient Tabular Workflow
@@ -179,6 +181,8 @@ Include this compact contract in `03_ANALYSIS_PLAN.md`:
 Create the signal inventory independently from approved decision-time-safe fields, prior analyses, and business heuristics. Ask the user about ambiguous semantics and known omissions; do not require the user to design the model.
 
 For prioritization, triage, lead scoring, or queueing work, document whether each candidate method outputs a ranked list, binary flag, probability, or category. Evaluate each method in the way it can actually be used. Do not give a binary flag artificial ranking power through hidden tie-breaking.
+
+Capacity-constrained prioritization normally needs an ordering. If a proposed method only returns yes/no, either confirm that the team can act on every positive case, add an approved second-stage ranking rule, or evaluate it as random selection from the positive pool. Report cumulative gain or recall at operational K when the action is "who first" or "which top K".
 
 ### Honest Evaluation
 
@@ -247,9 +251,11 @@ Never mark the user as reviewer or an artifact as approved unless the user expli
 
 ## Final Review
 
-Use a fresh independent agent or model call when supported. Give it the analysis folder and review task, not the main agent's reasoning or conclusions. Require it to inspect code and evidence, independently recompute at least one headline result, test development/evaluation separation, inspect timing and leakage, check cutoff ties, and attempt to falsify the recommendation.
+Run final review before writing polished final reports whenever the user asks to finalize, publish, wrap up, hand off, or write the business report. If the project provides an `adversarial_test` script, prompt, checklist, or tool, run it as part of this step. Use a fresh independent agent or model call when supported. Give it the analysis folder and review task, not the main agent's reasoning or conclusions. Require it to inspect code and evidence, independently recompute at least one headline result, test development/evaluation separation, inspect timing and leakage, check cutoff ties, and attempt to falsify the recommendation.
 
 If independence or executable verification is unavailable, label the review `Single-agent fallback - not independently verified`. In Expert Strict or high-stakes work, this blocks publication unless an expert explicitly accepts the limitation.
+
+After final reports are drafted, update `07_FINAL_REVIEW.md` with a short report-consistency check confirming that business and technical claims still match the reviewed evidence.
 
 ## Completion
 
