@@ -1,0 +1,7 @@
+interface:
+  display_name: "Systematic Data Science Agent"
+  short_description: "Auditable analysis from question to decision"
+  default_prompt: "Use $my-datascience-agent to turn my business question into a gated, reproducible analysis."
+
+policy:
+  allow_implicit_invocation: true
