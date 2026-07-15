@@ -388,6 +388,12 @@ Use the detailed review requirements in `references/review-and-retrospective.md`
 | Report | Check | Result |
 |---|---|---|
 | Business report | Headline recommendation and numbers match reviewed evidence |  |
+| Business report | Weekly/monthly/team extrapolations and percentages are arithmetically consistent |  |
+| Business report | Wording does not overclaim predicted outcomes as known outcomes |  |
+| Business report | Required production fields and timing conditions are complete |  |
+| Business report | Scorecard signals are not duplicated or double-counted without explanation |  |
+| Business report | Post-decision findings are not presented as deployable pre-decision rules |  |
+| Business report | Validation population versus deployment population is explicit |  |
 | Technical report | Method, limitations, and risks match reviewed evidence |  |
 | Evidence map | Claims trace to code/data/output paths |  |
 

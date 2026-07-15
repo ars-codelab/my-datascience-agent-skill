@@ -46,6 +46,8 @@ In 3-5 short paragraphs, state the recommendation, main evidence, decision impac
 
 State thresholds, priority tiers, escalation paths, or next decisions.
 
+List every required production input field and timing condition. If two scorecard rows use related fields, explain why both are needed or combine them.
+
 ## Caveats, Monitoring, And Follow-Up
 
 | Risk or unknown | Effect on decision | Monitoring / next step | Owner |
@@ -113,3 +115,13 @@ List data fingerprints, cache, code, environment, commands, and output paths.
 ## Final Writing Check
 
 Confirm the first page answers what to do, why, for whom, under which assumptions, and with what risk. Confirm every headline number traces through the evidence map and uses the correct denominator and baseline.
+
+Before publication, check:
+
+- Arithmetic consistency: recompute every headline lift, weekly/monthly conversion, team-size extrapolation, percentage, and rounded number.
+- Wording calibration: use predicted, scored, estimated, or expected when the model cannot know the true future state.
+- Operational completeness: list all fields required to apply the recommendation, including date fields needed for timing-safe logic.
+- Signal clarity: avoid duplicate or overlapping scorecard signals unless the distinction is explicit and justified.
+- Decision-time clarity: do not present post-decision or post-launch findings as deployable pre-decision rules; move them to caveats or follow-up ideas.
+- Population clarity: state whether validation used the exact deployment population or historical data with decision-time-safe fields.
+- Evidence consistency: ensure business report, technical report, evidence map, and final review use the same recommendation, numbers, baselines, and caveats.

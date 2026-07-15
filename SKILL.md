@@ -255,7 +255,7 @@ Run final review before writing polished final reports whenever the user asks to
 
 If independence or executable verification is unavailable, label the review `Single-agent fallback - not independently verified`. In Expert Strict or high-stakes work, this blocks publication unless an expert explicitly accepts the limitation.
 
-After final reports are drafted, update `07_FINAL_REVIEW.md` with a short report-consistency check confirming that business and technical claims still match the reviewed evidence.
+After final reports are drafted, update `07_FINAL_REVIEW.md` with a short report-consistency check confirming that business and technical claims still match the reviewed evidence. Check arithmetic, denominator/baseline consistency, decision-time-safe wording, required input fields, duplicate or overlapping signals, and whether validation population differs from the deployment population.
 
 ## Completion
 
