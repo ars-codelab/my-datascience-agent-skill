@@ -230,7 +230,7 @@ Target: 600-900 words.
 | Operational capacity and cutoffs |  |
 | Ranking requirement | Required / not required / unclear, with reason |
 | Tie policy |  |
-| Score spread and tie-density acceptance rule |  |
+| Score spread and tie-density acceptance rule | Minimum distinct scores, score range, largest tie at operating K, and remediation if compressed |
 | Correlated or overlapping signal policy |  |
 | Interpretability / implementation constraints |  |
 
@@ -358,6 +358,7 @@ Separate observations, inferences, and recommendations.
 | Candidate signal timing was verified or marked investigate |  |  |
 | Parsed date fields passed plausible range checks |  |  |
 | Scorecard spread and tie density are operationally usable |  |  |
+| Ranking scorecard has enough distinct values and score range for the operating K |  |  |
 | Correlated or overlapping scorecard signals are justified or removed |  |  |
 | Cohorts, denominators, periods, and baselines match |  |  |
 

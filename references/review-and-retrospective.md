@@ -20,7 +20,7 @@ Run this review before polished final reports when the user says to finalize, pu
 8. Verify that each method is evaluated according to its actual operational output: ranked list, binary flag, probability, category, or narrative recommendation.
 9. For binary flags used under limited capacity, compare random-from-flagged-pool or an approved tie-breaker; do not accept hidden top-K sorting.
 10. For capacity-constrained actions, verify that the primary metric matches the operating volume or queueing decision.
-11. Inspect ranking ties and any secondary sorting logic.
+11. Inspect ranking ties, score range, distinct score count, largest tie groups at operating cutoffs, and any secondary sorting logic.
 12. Confirm the data understanding artifact includes a full-column inventory and that important business-named text fields were scanned or explicitly ruled out.
 13. Attempt at least one plausible alternative explanation, sensitivity, or counterexample.
 14. Verify that every material claim maps to evidence and that reports expose unresolved risks.

@@ -75,7 +75,8 @@ Expected behavior:
 - Evaluates binary flags as flagged pools under limited capacity unless an approved ranking or tie-breaker exists.
 - Uses operational cutoffs such as call capacity, review volume, or queue size when relevant.
 - Documents and tests tie handling at the top-20-percent boundary.
-- Checks score spread and tie density before accepting a scorecard as operationally usable.
+- Checks score range, distinct score count, largest tie groups, and tie density before accepting a scorecard as operationally usable.
+- If scores are compressed, rescales weights, widens integer points, adds approved granular signals, or labels the output as tiers rather than a true ranking.
 - Removes or justifies weak, contradictory, or overlapping signals that duplicate stronger correlated signals.
 - Labels results exploratory if independent evaluation is impossible.
 
@@ -85,7 +86,7 @@ Failure examples:
 - Uses hidden secondary sorting.
 - Treats a binary flag as a ranked list through arbitrary top-K sorting.
 - Reports exact top-k metrics without discussing boundary ties.
-- Accepts a compressed scorecard with heavy cutoff ties as if it were a useful ranking.
+- Accepts a compressed scorecard with a small score range, few distinct values, or heavy cutoff ties as if it were a useful ranking.
 
 ## Test 4: Independent Final Review
 

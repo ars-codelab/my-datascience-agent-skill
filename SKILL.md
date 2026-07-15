@@ -205,7 +205,7 @@ Capacity-constrained prioritization normally needs an ordering. If a proposed me
 - Maintain separate inventories for decision-time-safe, post-decision, outcome/proxy, identifier, and investigate fields. Treat unknown field-population timing as `investigate`, not safe.
 - After parsing dates, verify plausible date ranges and null changes. Values such as epoch dates, far-future years, or mass conversion of numeric counts to dates require manual review.
 - If using logistic regression or another interpretable model to create a scorecard, prefer coefficient-scaled integer points over manually weighted deviations unless there is a clear reason not to.
-- Before accepting a scorecard, check score spread, tie density at operating cutoffs, and whether weak or contradictory signals are redundant with stronger correlated signals.
+- Before accepting a scorecard, check score spread, distinct score count, tie density at operating cutoffs, and whether weak or contradictory signals are redundant with stronger correlated signals. If the scorecard is used for ranking, compressed ranges or large cutoff ties are material defects; rescale weights, use a wider integer range, add approved granular signals, or report that the scorecard is tiering rather than ranking.
 
 ### Ranking And Ties
 
