@@ -68,8 +68,10 @@ When coverage is Partial or Low / none:
 3. Offer 2-4 plausible responses.
 4. Mark one response `Recommended` only when evidence supports it.
 5. Always include `Something else: ...`.
-6. Let the user reply with a letter, short phrase, or alternative.
-7. Reflect answers into the gated artifact and request explicit sign-off.
+6. Prefer the harness's native structured-choice UI when available. If unavailable, use compact lettered options in plain text.
+7. Let the user reply by selecting an option, typing a letter, writing a short phrase, or giving an alternative.
+8. Do not fall back to open-ended prose unless the question cannot reasonably be optioned.
+9. Reflect answers into the gated artifact and request explicit sign-off.
 
 Use this pattern:
 

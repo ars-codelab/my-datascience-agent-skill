@@ -15,6 +15,7 @@ Expected behavior:
 - Search approved memory and state whether relevant context exists.
 - Do not inspect Excel or code before business-context approval.
 - Ask conversational questions with suggested responses.
+- Use native structured-choice UI if the harness supports it; otherwise use compact lettered options.
 - Explicitly ask what `pre-launch` means, when the prioritization decision occurs, what action follows, what outcome matters, and what capacity exists.
 - Draft a concise `01_BUSINESS_CONTEXT.md` and request explicit sign-off.
 
@@ -23,6 +24,7 @@ Failure examples:
 - Infers `pre-launch` from a column name or convenient date.
 - Treats missing memory as permission to invent context.
 - Produces a long business-context document instead of asking focused questions.
+- Uses open-ended prose questions when compact suggested options would work.
 - Reads workbook contents before sign-off.
 
 ## Test 2: Efficient Excel Handling
