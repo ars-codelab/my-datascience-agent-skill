@@ -23,6 +23,7 @@ Read only the references needed for the current phase:
 - Read [references/report-templates.md](references/report-templates.md) before writing final reports.
 - Read [references/data-ingestion-and-access.md](references/data-ingestion-and-access.md) before inspecting Excel, CSV, TSV, databases, or MCP-provided data.
 - Read [references/review-and-retrospective.md](references/review-and-retrospective.md) before final review or retrospective work.
+- Read [references/harness-configuration.md](references/harness-configuration.md) when configuring reviewer models or adapting this skill to OpenCode, Codex, Claude Code, or another harness.
 - Read [references/benchmark-tests.md](references/benchmark-tests.md) only when testing or improving the skill.
 
 ## Non-Negotiable Rules
@@ -46,6 +47,17 @@ Ask for a mode if none is specified. Default to Collaborative.
 | Collaborative | Present 2-4 options and tradeoffs, recommend a path, and invite an alternative. | Hard CRISP-DM gates. |
 | Expert | Use concise technical language and accept strong methodological preferences. | CRISP-DM gates; user or expert approval. |
 | Expert Strict | Add query, code, reproducibility, and independent-review gates. | Expert approval at every material technical gate. |
+
+## Reviewer Model Configuration
+
+At project start, if the harness supports subagents, model selection, or agent profiles, ask the user to choose models for two reviewer roles:
+
+| Role | Purpose | Default if user does not choose |
+|---|---|---|
+| `adversarial_test` | Falsify analysis design, code, leakage, metrics, and rankability before final reports. | Strongest suitable reasoning model available. |
+| `final_business_review` | Review business findings, artifact freshness, arithmetic, source-of-truth table, and decision-ready wording. | Strongest suitable reasoning + writing model available. |
+
+Prefer native structured-choice UI when available. Otherwise offer compact lettered options. Record the harness, selected models, reviewer role names, and fallback behavior in `00_PROJECT_LOG.md`. If model selection or subagents are unavailable, record `same-model fallback` or `single-agent fallback` and label the review accordingly.
 
 ## Context-Adaptive Discovery
 

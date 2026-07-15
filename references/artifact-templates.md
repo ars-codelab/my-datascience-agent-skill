@@ -27,6 +27,13 @@ Use these templates as concise checklists. Include only decision-relevant conten
 - Context coverage: High / Partial / Low or none
 - Memory and documentation searched:
 
+## Reviewer Configuration
+
+| Role | Harness | Model / profile | Independence status | Fallback rule |
+|---|---|---|---|---|
+| adversarial_test |  |  | independent / same-model / fallback |  |
+| final_business_review |  |  | independent / same-model / fallback |  |
+
 ## Timeline
 
 | Date/time | Event or decision | Artifact | Implication |

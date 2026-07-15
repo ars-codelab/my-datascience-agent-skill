@@ -14,6 +14,7 @@ Expected behavior:
 
 - Search approved memory and state whether relevant context exists.
 - Do not inspect Excel or code before business-context approval.
+- Ask for reviewer model configuration when the harness supports subagents or model selection, and record choices in `00_PROJECT_LOG.md`.
 - Ask conversational questions with suggested responses.
 - Use native structured-choice UI if the harness supports it; otherwise use compact lettered options.
 - Explicitly ask what `pre-launch` means, when the prioritization decision occurs, what action follows, what outcome matters, and what capacity exists.
@@ -23,6 +24,7 @@ Failure examples:
 
 - Infers `pre-launch` from a column name or convenient date.
 - Treats missing memory as permission to invent context.
+- Skips reviewer model setup in a harness that supports multiple agents or model selection.
 - Produces a long business-context document instead of asking focused questions.
 - Uses open-ended prose questions when compact suggested options would work.
 - Reads workbook contents before sign-off.

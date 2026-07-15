@@ -6,6 +6,8 @@ Use a fresh agent or model call when the harness supports it. Prefer the stronge
 
 The reviewer must behave as a falsifier, not a document-completeness checker.
 
+Use the reviewer model choices recorded in `00_PROJECT_LOG.md`. If the requested reviewer model is unavailable, use the configured fallback rule and update the log before reviewing.
+
 Run this review before polished final reports when the user says to finalize, publish, wrap up, hand off, or write the business report. If the project provides an `adversarial_test` script, prompt, checklist, or tool, run it during this step. Final reports should incorporate the review findings, not be the first place the recommendation is made.
 
 ### Required Review Work
