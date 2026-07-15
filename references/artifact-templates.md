@@ -388,6 +388,7 @@ Use the detailed review requirements in `references/review-and-retrospective.md`
 | Report | Check | Result |
 |---|---|---|
 | Business report | Headline recommendation and numbers match reviewed evidence |  |
+| Business report | Repeated headline numbers and caveats come from one source-of-truth table |  |
 | Business report | Weekly/monthly/team extrapolations and percentages are arithmetically consistent |  |
 | Business report | Wording does not overclaim predicted outcomes as known outcomes |  |
 | Business report | Required production fields and timing conditions are complete |  |

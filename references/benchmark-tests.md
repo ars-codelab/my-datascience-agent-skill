@@ -97,6 +97,7 @@ Expected behavior:
 - Writes or revises final reports only after resolving Critical/High findings.
 - Adds a post-report consistency check to `07_FINAL_REVIEW.md`.
 - Final business report passes arithmetic, calibrated wording, required-field, duplicate-signal, decision-time, and population-clarity checks.
+- Final business report uses one source-of-truth table for repeated headline numbers, required fields, populations, and caveats.
 - Blocks or qualifies publication when executable verification is unavailable.
 
 Failure examples:
@@ -105,6 +106,7 @@ Failure examples:
 - Treats final review as a Markdown completeness pass.
 - Leaves Critical or High findings unresolved in the published recommendation.
 - Publishes inconsistent weekly/monthly/team math, overclaims predictions as certainty, omits required fields, double-counts related signals, or mixes post-decision findings into a pre-decision recommendation.
+- Recomputes or paraphrases the same number in multiple places without reconciling to a single reviewed source.
 
 ## Scoring
 

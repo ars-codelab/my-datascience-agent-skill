@@ -16,6 +16,24 @@ Write final reports only after `07_FINAL_REVIEW.md` contains a pre-report advers
 
 Use `We recommend` only for decision-ready evidence. Use `The evidence suggests` when uncertainty is material and `We cannot conclude` when the requested claim is unsupported.
 
+## Report Synthesis Protocol
+
+Treat final reports as a fresh synthesis from reviewed evidence, not a copy-forward from analysis notes.
+
+Before drafting, create or update a compact source-of-truth table for:
+
+| Item | Reviewed value | Evidence path | Report wording |
+|---|---|---|---|
+| Recommendation |  |  |  |
+| Primary metric and baseline |  |  |  |
+| Weekly / monthly / team extrapolation |  |  |  |
+| Required production fields |  |  |  |
+| Deployment population |  |  |  |
+| Validation population |  |  |  |
+| Main caveat |  |  |  |
+
+Use the table as the only source for repeated headline numbers and caveats. If a number is derived, write the formula once and reuse the derived value everywhere.
+
 ## `reports/business_report.md`
 
 ```markdown
@@ -119,6 +137,7 @@ Confirm the first page answers what to do, why, for whom, under which assumption
 Before publication, check:
 
 - Arithmetic consistency: recompute every headline lift, weekly/monthly conversion, team-size extrapolation, percentage, and rounded number.
+- Single-source consistency: each repeated number or caveat must come from the source-of-truth table, not be recalculated independently in prose.
 - Wording calibration: use predicted, scored, estimated, or expected when the model cannot know the true future state.
 - Operational completeness: list all fields required to apply the recommendation, including date fields needed for timing-safe logic.
 - Signal clarity: avoid duplicate or overlapping scorecard signals unless the distinction is explicit and justified.
