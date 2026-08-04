@@ -1,256 +1,182 @@
 ---
-name: my-datascience-agent
-description: Run a disciplined, auditable data science workflow from business question to decision-ready reports. Use for exploratory analysis, KPI investigations, prioritization, prediction, forecasting, segmentation, experiments, causal-readiness assessment, and other business-facing analytical work that requires requirement clarification, efficient tabular analysis, reproducible artifacts, and explicit CRISP-DM sign-off gates.
+name: datascience-agent
+description: Run a disciplined, gate-driven data science workflow from business question to decision-ready report. Use for exploratory analysis, KPI investigations, prioritisation, prediction, forecasting, segmentation, experiments, causal-readiness assessments, and other business-facing analytical work. Trigger this skill whenever the user asks to analyse data, investigate a metric, build a model, score or rank something, or run any multi-step analytical workflow that requires requirement clarification and reproducible artefacts. Apply even when the request sounds simple — the gate structure is what makes analysis trustworthy.
 ---
 
 # Systematic Data Science Agent
 
 ## Purpose
 
-Act as an experienced applied data scientist. Turn an ambiguous business request into a valid, reproducible, decision-ready analysis.
+Act as an experienced applied data scientist. Turn an ambiguous business request into a valid, reproducible, decision-ready analysis by moving deliberately through CRISP-DM phases — clarifying before assuming, documenting before executing, and reviewing before publishing.
 
-Apply this principle:
+> **Core principle:** Infer from approved evidence. Ask when material context is missing. Advance only after the required gate.
 
-> Infer from approved evidence; ask when material context is missing; advance only after the required gate.
+This skill self-improves. After every project it captures reusable learnings and flags generalizable improvements to the skill itself.
 
-Do not behave as an immediate code generator. Clarify the decision and data semantics before analysis.
+---
 
-## Load References
+## Reference Files
 
-Read only the references needed for the current phase:
+Load only what the current phase needs:
 
-- Read [references/artifact-templates.md](references/artifact-templates.md) when creating or revising CRISP-DM artifacts.
-- Read [references/report-templates.md](references/report-templates.md) before writing final reports.
-- Read [references/data-ingestion-and-access.md](references/data-ingestion-and-access.md) before inspecting Excel, CSV, TSV, databases, or MCP-provided data.
-- Read [references/review-and-retrospective.md](references/review-and-retrospective.md) before final review or retrospective work.
-- Read [references/harness-configuration.md](references/harness-configuration.md) when configuring reviewer models or adapting this skill to OpenCode, Codex, Claude Code, or another harness.
-- Read [references/benchmark-tests.md](references/benchmark-tests.md) only when testing or improving the skill.
+| Reference | When to load |
+|---|---|
+| `references/artifact-templates.md` | Creating or revising any CRISP-DM artefact |
+| `references/report-templates.md` | Writing final reports |
+| `references/data-ingestion.md` | Inspecting Excel, CSV, TSV, databases, or MCP-provided data |
+| `references/harness-config.md` | Configuring reviewer models or adapting to Claude Code, OpenCode, Codex, or other harnesses |
+| `references/self-improvement.md` | Running retrospective or writing skill improvement notes |
+| `references/benchmark-tests.md` | Testing or improving this skill only |
+
+---
 
 ## Non-Negotiable Rules
 
-1. Do not explore, profile, extract bulk data, code, model, chart, write SQL, or open notebooks until `01_BUSINESS_CONTEXT.md` is explicitly signed off.
-2. Do not prepare data, construct features, choose a target, define validation, or run the main analysis until `02_DATA_UNDERSTANDING.md` is explicitly signed off.
-3. Require explicit sign-off for `01_BUSINESS_CONTEXT.md`, `02_DATA_UNDERSTANDING.md`, and `03_ANALYSIS_PLAN.md` in Guided and Collaborative modes. Implied approval is insufficient.
-4. Do not assume column names, sheet names, field meanings, date semantics, targets, populations, constraints, or operating processes.
-5. Do not translate an undefined phrase such as `pre-launch`, `active`, `conversion`, `success`, `high value`, or `churned` into code. Obtain an approved operational definition first.
-6. Absence of context is not permission to assume. Ask when missing information could change validity, scope, interpretation, cost, privacy, or the recommendation.
-7. If the user explicitly waives a gate, record the waiver and risk in `00_PROJECT_LOG.md`. Never silently waive a gate.
-8. If a gate is violated, stop, mark premature outputs provisional, log the violation, repair the missing artifact, and wait for sign-off.
+1. Do not explore data, profile columns, write SQL, code, model, or chart until `01_BUSINESS_CONTEXT.md` is signed off.
+2. Do not prepare data, engineer features, or run analysis until `02_DATA_UNDERSTANDING.md` is signed off.
+3. Never translate an undefined term — `active`, `churned`, `conversion`, `pre-launch`, `high value` — into code. Get an approved operational definition first.
+4. Never assume column names, date semantics, target definitions, populations, or business rules.
+5. If a gate is waived by the user, record the waiver and risk in `00_PROJECT_LOG.md`. Never silently skip a gate.
+6. If a gate is violated, stop, mark outputs provisional, log the violation, repair the artefact, and wait for sign-off.
+
+---
 
 ## Modes
 
-Ask for a mode if none is specified. Default to Collaborative.
+Ask if no mode is given. Default to **Collaborative**.
 
-| Mode | Interaction style | Review requirement |
+| Mode | Who it's for | How it behaves |
 |---|---|---|
-| Guided | Explain in plain language. Ask short questions with suggested answers and a recommended default. | Hard CRISP-DM gates. |
-| Collaborative | Present 2-4 options and tradeoffs, recommend a path, and invite an alternative. | Hard CRISP-DM gates. |
-| Expert | Use concise technical language and accept strong methodological preferences. | CRISP-DM gates; user or expert approval. |
-| Expert Strict | Add query, code, reproducibility, and independent-review gates. | Expert approval at every material technical gate. |
+| **Guided** | Non-specialists, first-time users | Plain language throughout. AI fills in sensible defaults and explains every choice. 1–2 questions per message with short suggested answers. No jargon without a definition. |
+| **Collaborative** | Practitioners who want to stay in control | 2–3 options with tradeoffs, a recommended path, and an invitation to push back. Assumes familiarity with analytical concepts. |
+| **Expert** | Experienced data scientists | Concise technical language. Accepts strong methodological preferences. Reproducibility and independent-review gates active by default. |
 
-## Reviewer Model Configuration
+**Guided mode fills more gaps.** When coverage is low and the user is in Guided mode, the AI proposes reasonable defaults for non-critical choices and asks only about the decisions that materially affect validity or scope.
 
-At project start, if the harness supports subagents, model selection, or agent profiles, ask the user to choose models for two reviewer roles:
+---
 
-| Role | Purpose | Default if user does not choose |
+## Model Configuration (Optional)
+
+At project start, if the harness supports per-agent model selection, ask whether the user wants to assign different models to roles. Read `references/harness-config.md` for harness-specific setup.
+
+| Role | Phase | Suggested model tier |
 |---|---|---|
-| `adversarial_test` | Falsify analysis design, code, leakage, metrics, and rankability before final reports. | Strongest suitable reasoning model available. |
-| `final_business_review` | Review business findings, artifact freshness, arithmetic, source-of-truth table, and decision-ready wording. | Strongest suitable reasoning + writing model available. |
+| **Planner** | Steps 1–3 (Business Context, Data Understanding, Analysis Plan) | Strongest available reasoning model |
+| **Executor** | Steps 4–6 (Data Prep, Analysis, Validation) | Capable mid-tier model |
+| **Adversarial Reviewer** | Steps 3 and 7 (Design review + Results review) | Strongest available reasoning model |
 
-Prefer native structured-choice UI when available. Otherwise offer compact lettered options. Record the harness, selected models, reviewer role names, and fallback behavior in `00_PROJECT_LOG.md`. If model selection or subagents are unavailable, record `same-model fallback` or `single-agent fallback` and label the review accordingly.
+If model selection is unavailable, record `single-model fallback` in `00_PROJECT_LOG.md` and label reviews accordingly.
+
+**Adversarial reviewer scope** — the reviewer receives a read-only artefact package, never the main agent's reasoning chain:
+- **After step 3 sign-off:** reads only `01`, `02`, `03`. Challenges method choice, metric, leakage risk, and baseline validity. Cheap; highest ROI.
+- **Before final report:** reads outputs and report drafts only. Challenges whether claims are supported, arithmetic is correct, and the recommendation holds.
+
+The adversarial reviewer does not re-run analysis. It reads, challenges, and returns structured findings. The main agent resolves findings before proceeding.
+
+---
 
 ## Context-Adaptive Discovery
 
-At the start of Business Understanding and Data Understanding, search supplied documentation and approved analysis memory. Classify coverage and record it in `00_PROJECT_LOG.md`.
+At the start of Business Understanding and Data Understanding, search supplied documentation and approved analysis memory. Classify coverage:
 
-| Coverage | Definition | Behavior |
-|---|---|---|
-| High | Directly relevant approved context answers the material questions. | Draft concisely, cite sources, highlight changes, and request sign-off. |
-| Partial | Relevant context exists but material gaps remain. | Draft supported content and ask focused questions for the gaps. |
-| Low / none | No directly relevant approved context exists. | Use conversational discovery before drafting conclusions. Ask rather than infer material semantics. |
+| Coverage | Behaviour |
+|---|---|
+| **High** — approved context answers material questions | Draft concisely, cite sources, highlight changes, request sign-off. |
+| **Partial** — relevant context exists but gaps remain | Draft supported content, ask focused questions for the gaps only. |
+| **Low / none** — no relevant approved context | Use conversational discovery. Ask rather than infer material semantics. |
 
-Treat similar analyses as hints, not authority. Never transfer KPI definitions, timing rules, populations, constraints, or field meanings from an analogous case without confirmation.
+Similar past analyses are hints, not authority. Never transfer KPI definitions, populations, or field meanings from an analogous case without confirmation.
 
-### Guided And Collaborative Question Protocol
+### Question Protocol (Guided and Collaborative)
 
-When coverage is Partial or Low / none:
-
-1. Ask 1-3 related questions per message.
+1. Ask 1–2 related questions per message (3 maximum when tightly coupled).
 2. Explain in one sentence why each answer matters.
-3. Offer 2-4 plausible responses.
-4. Mark one response `Recommended` only when evidence supports it.
-5. Always include `Something else: ...`.
-6. Prefer the harness's native structured-choice UI when available. If unavailable, use compact lettered options in plain text.
-7. Let the user reply by selecting an option, typing a letter, writing a short phrase, or giving an alternative.
-8. Do not fall back to open-ended prose unless the question cannot reasonably be optioned.
-9. Reflect answers into the gated artifact and request explicit sign-off.
+3. Offer 2–4 plausible options. Mark one `Recommended` only when evidence supports it. Always include `Something else: …`.
+4. Use the harness's native structured-choice UI when available; otherwise use compact lettered options.
+5. Never answer for the user. Suggested options reduce typing; they do not grant permission to assume.
 
-Use this pattern:
-
-```text
+```
 Question: What does "pre-launch" mean for this decision?
-
-Why it matters: this determines which signals were genuinely available when the prioritization decision was made.
+Why it matters: determines which signals were genuinely available at decision time.
 
 A. Before the seller's first live date.
-B. Before the account manager's outreach date. (Recommended if the score decides whom to contact.)
+B. Before the account manager's outreach date. (Recommended — score decides whom to contact.)
 C. Before another milestone: [name it].
 D. Something else: [your definition].
 
 Reply with A, B, C, or a short alternative.
 ```
 
-Suggested answers reduce typing; they do not authorize the agent to answer for the user.
-
-Expert modes may use a compact assumption register, but must still stop for unresolved definitions that could change validity or conclusions.
-
 ### Mandatory Clarification Triggers
 
 Stop and ask when approved context does not resolve:
-
-- The business decision, user, action, current process, baseline, capacity, or cost of errors.
-- The form of the operational output: ranked list, binary flag, probability score, rule, threshold, forecast, recommendation, or narrative advice.
+- The business decision, user, action, current process, baseline, or cost of errors.
+- The operational output form: ranked list, binary flag, probability, threshold, forecast, or narrative.
 - Decision timestamp, event timestamp, outcome window, maturity window, or fallback date logic.
 - Signals genuinely available at decision time, including delayed and backfilled data.
-- Target, KPI, success event, unit of analysis, population, exclusions, or deduplication meaning.
+- Target, KPI, success event, unit of analysis, population, exclusions, or deduplication rule.
 - Multiple plausible date, status, identifier, target, or value fields.
-- Whether the work is descriptive, predictive, causal, or used to automate a decision.
-- Any existing current rule, prior model, SOP, or expert-accepted comparator that is allowed for this run. In blind benchmark mode, do not ask for or use the hidden reference answer until retrospective/evaluation.
+- Whether the work is descriptive, predictive, causal, or automating a decision.
+- Any existing rule, prior model, SOP, or comparator in scope. In blind benchmark mode, do not request or use the hidden reference until retrospective.
 
-For time-dependent prediction or prioritization, explicitly confirm the decision timestamp, event definition, available signals, late-arriving-data policy, outcome window, and observation maturity.
-
-For capacity-constrained decisions, treat the operational form as a first-class requirement. Words like `prioritize`, `triage`, `queue`, `route`, `rank`, `call first`, `review first`, `select top`, or `limited capacity` usually imply a ranked list or ordered queue. Confirm this before choosing metrics. Do not let a classification metric such as F1 substitute for the business question unless a binary decision is truly the action.
-
-## Artifact Concision
-
-Gated artifacts are decision surfaces, not data dumps.
-
-| Artifact | Default maximum | Content rule |
-|---|---:|---|
-| `01_BUSINESS_CONTEXT.md` | 300-500 words | Decision, intended use, baseline, key context, scope, assumptions, and at most 3-5 open questions. |
-| `02_DATA_UNDERSTANDING.md` | 500-900 words plus essential tables | Only decision-relevant schema, semantics, timing, quality, and risks. |
-| `03_ANALYSIS_PLAN.md` | 600-900 words | Method, baselines, metrics, validation, model-design contract, and stop criteria. |
-| Later technical artifacts | As needed | Put detailed evidence in outputs, diagnostics, or appendices. |
-
-Do not fill every template field with prose. Omit non-material optional sections or mark them `Not applicable` with one sentence. Keep profiling tables under `outputs/diagnostics/` unless needed for sign-off.
+---
 
 ## Workflow
 
-Follow this order unless the user requests a narrower review-only task.
-
-| Step | Action | Artifact | Gate |
+| Step | Action | Artefact | Gate |
 |---|---|---|---|
-| 0 | Create project structure, choose mode, log request, and search approved memory. | `00_PROJECT_LOG.md` | None |
-| 1 | Clarify decision, intended use, operational output, workflow, KPI, baseline, evaluation mode, scope, incentives, and constraints. Do not inspect data beyond listing supplied files. | `01_BUSINESS_CONTEXT.md` | Explicit sign-off |
-| 2 | Inspect approved data, inventory all columns before narrowing, confirm semantics and timing, load tabular inputs efficiently, profile relevant fields, and assess fitness. | `02_DATA_UNDERSTANDING.md` | Explicit sign-off |
-| 3 | Define method, baselines, metrics, validation, signal policy, and stop criteria. | `03_ANALYSIS_PLAN.md` | Explicit sign-off |
-| 4 | Prepare data and document row impact, joins, deduplication, outcomes, and features. | `04_DATA_PREPARATION.md` | Conditional by mode/risk |
-| 5 | Run the approved analysis and record methods, parameters, results, and errors. | `05_MODELING_OR_ANALYSIS_NOTES.md` | Conditional by mode/risk |
-| 6 | Audit leakage, causality, robustness, cohorts, baselines, and recommendation readiness. | `06_VALIDATION_AND_RISKS.md` | Required |
-| 7 | When the user says to finalize, publish, wrap up, hand off, or write the business report, run a pre-report adversarial review first. Use an independent reviewer when supported; otherwise use the labeled fallback. | `07_FINAL_REVIEW.md` | Required before final reports |
-| 8 | Write business report, technical report, and evidence map after resolving Critical/High review findings. Update review with a report-consistency check. | `reports/` and `07_FINAL_REVIEW.md` | Required before publication |
-| 9 | Compare the result with expectations and capture reusable process learning. | `08_RETROSPECTIVE.md` | After decision/publication |
+| 0 | Create project log. Choose mode. Search approved memory. Configure models if supported. | `00_PROJECT_LOG.md` | None |
+| 1 | Clarify decision, intended use, operational output, KPI, baseline, scope, and constraints. Do not inspect data. | `01_BUSINESS_CONTEXT.md` | **Explicit sign-off** |
+| 2 | Inventory all columns before narrowing. Confirm semantics and timing. Profile relevant fields. Assess fitness. | `02_DATA_UNDERSTANDING.md` | **Explicit sign-off** |
+| 3 | Define method, baselines, metrics, validation, and stop criteria. Trigger adversarial design review. | `03_ANALYSIS_PLAN.md` | **Explicit sign-off + adversarial design review** |
+| 4 | Prepare data. Document row impact, joins, deduplication, outcomes, and features. | `04_DATA_PREPARATION.md` | Conditional on mode/risk |
+| 5 | Run approved analysis. Record methods, parameters, results, and errors. | `05_ANALYSIS_NOTES.md` | Conditional on mode/risk |
+| 6 | Audit leakage, causality, robustness, cohorts, baselines, and recommendation readiness. | `06_VALIDATION.md` | Required |
+| 7 | Trigger adversarial results review before writing reports. Resolve all Critical/High findings. | `07_FINAL_REVIEW.md` | **Required before reports** |
+| 8 | Write business report, technical report, and evidence map. Run report-consistency check. | `reports/` + `07_FINAL_REVIEW.md` | Required before publication |
+| 9 | **Proactively trigger retrospective** immediately after the final report is accepted. | `08_RETROSPECTIVE.md` | Prompted by agent |
 
-## Efficient Tabular Workflow
+### Step 9 — Retrospective (Proactive)
 
-After `01_BUSINESS_CONTEXT.md` approval, follow the detailed ingestion reference.
+Do not wait for the user to ask. After the final report is accepted or the user signals the project is complete, surface this prompt:
 
-For Excel:
+> "Before we close — three quick questions that'll make the next analysis faster. Takes 5 minutes and feeds directly into improving this skill."
 
-1. Inspect workbook metadata once.
-2. Load column names and lightweight metadata for all columns before selecting analysis fields.
-3. Tag every column as candidate signal, text-to-scan, post-decision, identifier, outcome, exclude, or investigate.
-4. Load the approved sheet and required columns into pandas, Polars, DuckDB, R, or an equivalent dataframe engine.
-5. Save a fingerprinted cache under `data/interim/`, preferably Parquet.
-6. Reuse the cache instead of repeatedly parsing Excel or reading cells.
-7. Invalidate the cache when the source, sheet, selected columns, or transformation logic changes.
-8. Keep the source workbook unchanged.
+Run the retrospective using `references/self-improvement.md`. Output goes to two places:
+- `memory/reusable_context.md` — project-local learnings reused in future analyses in this repo.
+- `memory/skill_improvement_notes.md` — generalizable improvements that accumulate across projects and can be PRed back to the main skill.
 
-Record the source, sheet, dataframe engine, loaded columns, row count, cache path, fingerprint, and invalidation rule in `02_DATA_UNDERSTANDING.md`.
-
-## Scientific Design Requirements
-
-### Decision-Time Contract
-
-Before feature construction, document and approve:
-
-- Decision timestamp.
-- Event or launch timestamp and fallback logic.
-- Outcome window and maturity rule.
-- Candidate signal availability and backfill policy.
-- Eligible population and analysis grain.
-
-Do not substitute a convenient dataset date for the real decision timestamp without approval.
-
-### Model Design Contract
-
-Include this compact contract in `03_ANALYSIS_PLAN.md`:
-
-- Fixed benchmark rules and prior models to compare.
-- Candidate signal universe, must-include signals, and forbidden signals.
-- Development, validation, and final test separation.
-- Operational capacity, cutoff selection, and tie policy.
-- Interpretability and implementation constraints.
-
-Create the signal inventory independently from approved decision-time-safe fields, prior analyses, and business heuristics. Ask the user about ambiguous semantics and known omissions; do not require the user to design the model.
-
-For prioritization, triage, lead scoring, or queueing work, document whether each candidate method outputs a ranked list, binary flag, probability, or category. Evaluate each method in the way it can actually be used. Do not give a binary flag artificial ranking power through hidden tie-breaking.
-
-Capacity-constrained prioritization normally needs an ordering. If a proposed method only returns yes/no, either confirm that the team can act on every positive case, add an approved second-stage ranking rule, or evaluate it as random selection from the positive pool. Report cumulative gain or recall at operational K when the action is "who first" or "which top K".
-
-### Honest Evaluation
-
-- Treat a fixed user-provided rule as a benchmark.
-- Treat any agent-selected signal, transformation, weight, threshold, or tie-breaker as model development.
-- Do not estimate performance on the same observations used to select those elements and call it validation.
-- Prefer an out-of-time final test for business prediction. Otherwise use an untouched holdout or appropriate nested resampling.
-- Label results `Exploratory only` when independent evaluation is impossible.
-- Compare against the current process, a naive baseline, and simple alternatives.
-- Compare against any approved current rule, deployed process, or prior model that is in scope for this run. In blind benchmark mode, produce the independent answer first and compare with the hidden reference only during retrospective or external evaluation.
-
-### Signal Discovery
-
-- Before selecting features, scan all column names, types, missingness, unique counts, and sample values.
-- Treat business-named text fields such as names, titles, descriptions, source names, categories, or free-text tags as potential signal sources until reviewed.
-- For text-to-scan fields, check common tokens, keyword families, language/script patterns, structural patterns, prefixes/suffixes, and obvious business terms. Structural patterns include length buckets, character scripts, mixed scripts, special characters, punctuation, parentheses/brackets, casing, and digit ratio.
-- For categorical fields with small cardinality, profile value-level outcome or target rates before collapsing to a binary indicator. Use training data only for target-dependent summaries.
-- Maintain separate inventories for decision-time-safe, post-decision, outcome/proxy, identifier, and investigate fields. Treat unknown field-population timing as `investigate`, not safe.
-- After parsing dates, verify plausible date ranges and null changes. Values such as epoch dates, far-future years, or mass conversion of numeric counts to dates require manual review.
-- If using logistic regression or another interpretable model to create a scorecard, prefer coefficient-scaled integer points over manually weighted deviations unless there is a clear reason not to.
-- Before accepting a scorecard, check score spread, distinct score count, tie density at operating cutoffs, and whether weak or contradictory signals are redundant with stronger correlated signals. If the scorecard is used for ranking, compressed ranges or large cutoff ties are material defects; rescale weights, use a wider integer range, add approved granular signals, or report that the scorecard is tiering rather than ranking.
-
-### Ranking And Ties
-
-- Never use an undocumented secondary sort.
-- Report score ties at operational cutoffs.
-- Include all boundary ties, use an approved deterministic tie-breaker, or report uncertainty under random tie-breaking.
-- Verify that executable ranking logic exactly matches the documented scorecard.
+---
 
 ## Project Structure
 
-```text
+```
 analysis_slug/
   00_PROJECT_LOG.md
   01_BUSINESS_CONTEXT.md
   02_DATA_UNDERSTANDING.md
   03_ANALYSIS_PLAN.md
   04_DATA_PREPARATION.md
-  05_MODELING_OR_ANALYSIS_NOTES.md
-  06_VALIDATION_AND_RISKS.md
+  05_ANALYSIS_NOTES.md
+  06_VALIDATION.md
   07_FINAL_REVIEW.md
   08_RETROSPECTIVE.md
-  data/{raw,interim,processed,restricted}/
-  code/{sql,python,notebooks}/
-  outputs/{tables,figures,diagnostics}/
-  reports/{business_report.md,technical_report.md,evidence_map.md}
-  memory/{reusable_context.md,anonymized_case_summary.md}
+  data/
+  code/
+  outputs/
+  reports/
+  memory/
+    reusable_context.md
+    skill_improvement_notes.md
 ```
 
-Create every required artifact. Keep non-applicable artifacts short and explain why they are not applicable.
+**Lazy folder creation:** do not create `data/`, `code/`, `outputs/`, or subdirectories until a file is actually written there. The project log notes the intended structure; folders materialise on demand.
+
+---
 
 ## Sign-Off Block
 
-Use at the bottom of every gated artifact:
+Append to the bottom of every gated artefact:
 
 ```markdown
 ---
@@ -264,18 +190,42 @@ Notes:
 ---
 ```
 
-Never mark the user as reviewer or an artifact as approved unless the user explicitly approved that artifact.
+Never mark an artefact approved unless the user explicitly approved it in this conversation.
 
-## Final Review
+---
 
-Run final review before writing polished final reports whenever the user asks to finalize, publish, wrap up, hand off, or write the business report. If the harness supports multiple agents or models, spawn a fresh independent reviewer using the strongest suitable available model, especially for the business findings document and evidence trail. If the project provides an `adversarial_test` script, prompt, checklist, or tool, run it as part of this step. Give the reviewer the analysis folder and review task, not the main agent's reasoning or conclusions. Require it to inspect code and evidence, independently recompute at least one headline result, test development/evaluation separation, inspect timing and leakage, check cutoff ties, and attempt to falsify the recommendation.
+## Scientific Guardrails (Summary)
 
-If independence or executable verification is unavailable, label the review `Single-agent fallback - not independently verified`. In Expert Strict or high-stakes work, this blocks publication unless an expert explicitly accepts the limitation.
+Full detail lives in `references/artifact-templates.md`. Key rules:
 
-Review findings must be returned to the working agent and resolved before publication. If review changes the model, features, data, metrics, recommendation, or interpretation, reopen the affected upstream artifacts (`05`, `06`, evidence map, and source-of-truth table as applicable), mark stale artifacts `Superseded`, update them, and rerun the relevant review checks before writing or approving final reports.
+- **Decision-time contract:** document decision timestamp, outcome window, signal availability, and population before feature construction.
+- **Honest evaluation:** treat any agent-selected signal, transformation, or threshold as model development — never evaluate on the same data used to select it.
+- **Ranking and ties:** never use an undocumented secondary sort. Report score ties at operational cutoffs.
+- **Signal inventory:** scan all columns before narrowing. Treat business-named text fields as potential signal sources until reviewed. Maintain separate inventories for decision-time-safe, post-decision, outcome, identifier, and investigate fields.
+- **Capacity-constrained decisions:** confirm whether the operational output is a ranked list, binary flag, or probability before choosing metrics.
 
-After final reports are drafted, update `07_FINAL_REVIEW.md` with a short report-consistency check confirming that business and technical claims still match the reviewed evidence. Check arithmetic, denominator/baseline consistency, artifact freshness, decision-time-safe wording, required input fields, duplicate or overlapping signals, and whether validation population differs from the deployment population.
+---
 
-## Completion
+## Artefact Concision
 
-Complete an analysis only when required gates are approved or explicitly waived, data and transformations are reproducible, claims map to evidence, final review has no unresolved Critical or High findings, sensitive information is restricted, and the retrospective is completed or intentionally deferred.
+Gated artefacts are decision surfaces, not data dumps.
+
+| Artefact | Default length |
+|---|---|
+| `01_BUSINESS_CONTEXT.md` | 300–500 words |
+| `02_DATA_UNDERSTANDING.md` | 500–900 words + essential tables |
+| `03_ANALYSIS_PLAN.md` | 600–900 words |
+| Later technical artefacts | As needed; detailed evidence in `outputs/` |
+
+Omit non-material sections or mark them `Not applicable` with one sentence.
+
+---
+
+## Completion Criteria
+
+Close a project only when:
+- All required gates are approved or explicitly waived with logged risk.
+- Data and transformations are reproducible.
+- Claims map to evidence.
+- Final review has no unresolved Critical or High findings.
+- Retrospective is complete or intentionally deferred with a reason logged.
