@@ -97,7 +97,7 @@ datascience-agent/
   references/
     artifact-templates.md           ← CRISP-DM artefact templates and sign-off blocks
     report-templates.md             ← business and technical report templates
-    data-ingestion.md               ← reading Excel, CSV, databases, MCP sources
+    data-ingestion-and-access.md    ← reading Excel, CSV, databases, MCP sources
     harness-config.md               ← per-harness model config + adversarial reviewer prompt
     self-improvement.md             ← retrospective protocol and contribution guide
     benchmark-tests.md              ← test cases for evaluating skill quality
