@@ -1,6 +1,46 @@
-# Final Report Templates
+# Report Templates
 
-Write final reports only after `07_FINAL_REVIEW.md` contains a pre-report adversarial review or a clearly labeled fallback review. Resolve Critical and High findings before presenting the recommendation as decision-ready.
+---
+
+## Data Scout Output Spec
+
+Scout outputs live in the conversation — no files, no project folders. This spec defines the structure the agent targets when producing a Scout response.
+
+### Required elements
+
+**Header line (always first):**
+> *Exploratory analysis — not reviewed for production use.*
+
+**Findings bullets (4–6):**
+- State what the data shows in plain language
+- Pair every metric with its population, period, and how it was defined (e.g. "T4W gross revenue, weeks ending [date], excluding cancelled orders per column X")
+- Flag any data quality issue that affects a headline number inline (e.g. "Note: 3.2% of revenue rows have null order_date and are excluded from the weekly trend")
+
+**Unsolicited observations (2–3):**
+- Surface patterns the user didn't ask for but should know
+- Label clearly as observations, not conclusions: "Worth noting:" or "One thing this data hints at:"
+- Keep to one sentence each — detail comes if the user follows up
+
+**Visualisation:**
+- Prefer a single HTML dashboard over multiple separate charts
+- Labelled axes, readable at a glance, mobile-friendly where possible
+- If a single chart is cleaner than a dashboard, use that
+
+**Bridge (always last):**
+> "A couple of things this data raises that would take a proper analysis to answer: [1–2 specific questions]. Want me to scope a full Data Scientist analysis for either of these?"
+
+The bridge questions must come from the data — don't manufacture escalation. If nothing in the data genuinely warrants deeper investigation, say so.
+
+### Assumptions log (inline, not a separate file)
+
+When Scout makes a reasonable assumption to avoid asking a question, state it inline immediately before the finding it affects:
+> *Assumed: "revenue" = column `gmv_jpy`, net of `returns_jpy`. Let me know if a different definition applies.*
+
+---
+
+## Data Scientist Report Templates
+
+Write final reports only after `07_FINAL_REVIEW.md` contains a pre-report adversarial review or a clearly labelled fallback review. Resolve Critical and High findings before presenting the recommendation as decision-ready.
 
 ## Writing Standard
 
@@ -120,9 +160,11 @@ List data fingerprints, cache, code, environment, commands, and output paths.
 | Claim | Report section | Data | Code | Output | Recomputed in review? | Strength |
 |---|---|---|---|---|---|---|
 
-## Restricted Artifacts
+## Restricted Artefacts
 
-| Artifact | Restriction reason | Safe aggregate replacement |
+Artefacts that cannot be shared with the business report audience due to sensitivity (raw PII, proprietary schema, confidential benchmarks). List them here with a safe aggregate replacement so the evidence map remains complete without exposing restricted content.
+
+| Artefact | Restriction reason | Safe aggregate replacement |
 |---|---|---|
 
 ## Reproduction Notes
