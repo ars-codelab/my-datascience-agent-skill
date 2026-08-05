@@ -87,7 +87,7 @@ Each reference file is loaded on demand — only when the current phase needs it
 
 ```bash
 # Clone the repo
-git clone https://github.com/your-username/datascience-agent
+git clone [https://github.com/your-username/datascience-agent](https://github.com/ars-codelab/my-datascience-agent-skill)
 
 # Add SKILL.md to your project's .claude/skills/ directory, or reference it directly
 cp datascience-agent/SKILL.md .claude/skills/datascience-agent.md
