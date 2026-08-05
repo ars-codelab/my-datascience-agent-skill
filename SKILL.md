@@ -42,7 +42,7 @@ Load only what the current phase needs:
 |---|---|
 | `references/artifact-templates.md` | Creating or revising any CRISP-DM artefact |
 | `references/report-templates.md` | Writing final reports |
-| `references/data-ingestion-and-access.md` | Inspecting Excel, CSV, TSV, databases, or MCP-provided data |
+| `references/data-ingestion.md` | Inspecting Excel, CSV, TSV, databases, or MCP-provided data |
 | `references/harness-config.md` | Configuring reviewer models or adapting to Claude Code, OpenCode, Codex, or other harnesses |
 | `references/self-improvement.md` | Running retrospective or writing skill improvement notes |
 | `references/benchmark-tests.md` | Testing or improving this skill only |
@@ -81,21 +81,37 @@ Two independent dimensions: **analytical mode** (Scout vs. Scientist) and **expe
 
 **Guided level fills more gaps.** When data coverage is low and the user is in Guided level, the AI proposes reasonable defaults for non-critical choices and asks only about decisions that materially affect validity or scope.
 
-**Infer expertise level from the conversation.** If the user says "run a quick EDA on this CSV," default to Collaborative. If they say "check for multicollinearity and run a VIF before fitting," they're Expert. If they say "I don't really know what I'm looking for," they're Guided. State the inferred level briefly and move on — don't make it a formal selection unless it's unclear.
+**Announce the inferred expertise level — don't adapt silently.** Read the user's opening message and state the inferred level in the same turn as the mode proposal. One sentence, easy to override:
+
+> "Running this in **Collaborative** level — I'll present options with tradeoffs. Say 'guided', 'expert', or just tell me your preference if you'd like something different."
+
+Signal mapping:
+- "I don't know what I'm looking for" / "help me understand" / no technical language → **Guided**
+- "run a quick EDA" / "what's the T4W revenue" / general analytical language → **Collaborative** (default)
+- "check for multicollinearity", "run a VIF", "use a time-series cross-validator" / strong methodological preferences → **Expert**
+
+If expertise level changes mid-session (user starts asking more technical questions, or signals confusion), restate the level and adapt — don't wait for them to ask.
 
 ---
 
-## Model Configuration (Optional)
+## Model Configuration
 
-At project start, if the harness supports per-agent model selection, ask whether the user wants to assign different models to roles. Read `references/harness-config.md` for harness-specific setup.
+**Always ask at Data Scientist project start — don't gate on harness detection.** The agent cannot reliably detect harness capability; the user can. Ask once, keep it short, make skipping easy.
+
+**Prompt phrasing (include in the same opening message as mode + expertise level):**
+> "One setup question: do you want to use a stronger model for planning and adversarial review, and a faster model for analysis execution? This gives better quality checks without paying for the expensive model on every step. Say 'yes', 'skip', or tell me which models you have available."
+
+If the user says yes → load `references/harness-config.md` and follow the setup steps for their harness, including writing any required agent config files.
+
+If the user says skip or doesn't respond to this → record `single-model fallback` in `00_PROJECT_LOG.md` and label adversarial reviews as `Single-agent fallback — not independently verified`.
+
+**Do not ask in Data Scout mode.** Model configuration is a Data Scientist setup step only.
 
 | Role | Phase | Suggested model tier |
 |---|---|---|
 | **Planner** | Steps 1–3 (Business Context, Data Understanding, Analysis Plan) | Strongest available reasoning model |
 | **Executor** | Steps 4–6 (Data Prep, Analysis, Validation) | Capable mid-tier model |
 | **Adversarial Reviewer** | Steps 3 and 7 (Design review + Results review) | Strongest available reasoning model |
-
-If model selection is unavailable, record `single-model fallback` in `00_PROJECT_LOG.md` and label reviews accordingly.
 
 **Adversarial reviewer scope** — the reviewer receives a read-only artefact package, never the main agent's reasoning chain:
 - **After step 3 sign-off:** reads only `01`, `02`, `03`. Challenges method choice, metric, leakage risk, and baseline validity. Cheap; highest ROI.
@@ -227,7 +243,7 @@ Rigorous, gate-driven, reproducible. Every step produces a signed-off artefact. 
 
 | Step | Action | Artefact | Gate |
 |---|---|---|---|
-| 0 | Create project log. Choose mode. Search approved memory. Configure models if supported. | `00_PROJECT_LOG.md` | None |
+| 0 | **Opening message** — propose analytical mode + state inferred expertise level + ask model config question (all in one message). Create project log. Search approved memory. | `00_PROJECT_LOG.md` | None |
 | 1 | Clarify decision, intended use, operational output, KPI, baseline, scope, and constraints. Do not inspect data. | `01_BUSINESS_CONTEXT.md` | **Explicit sign-off** |
 | 2 | Inventory all columns before narrowing. Confirm semantics and timing. Profile relevant fields. Assess fitness. | `02_DATA_UNDERSTANDING.md` | **Explicit sign-off** |
 | 3 | Define method, baselines, metrics, validation, and stop criteria. Trigger adversarial design review. | `03_ANALYSIS_PLAN.md` | **Explicit sign-off + adversarial design review** |
