@@ -227,7 +227,24 @@ Close every Scout output with a natural escalation offer based on what the data 
 
 > "A couple of things this data hints at that would take a proper analysis to answer: [1–2 specific questions the Scout output raised]. Want me to scope a full Data Scientist analysis for either of these?"
 
-If the user says yes → transition to Data Scientist mode, start from step 1 of the CRISP-DM workflow. The Scout output becomes context, not a substitute for Business Understanding.
+If the user says yes → run the **Scout-to-Scientist handoff protocol** before starting step 1 of the CRISP-DM workflow.
+
+### Scout-to-Scientist Handoff Protocol
+
+The Scout output is useful context, not a substitute for Business Understanding. Before starting the CRISP-DM workflow, pause and ask three questions — all in one message:
+
+**1. Data adequacy**
+> "Before we scope the [forecasting / modelling / causal] analysis — is the file we just explored the right and complete data for this question? Do you have access to additional signals (e.g. external data, more history, more granular fields, related tables) that might be relevant? It's worth knowing now, before we design the analysis around what's here."
+
+Why this matters: the Scout data was chosen for exploration, not necessarily for modelling. Additional signals may be available that the user didn't think to attach. Discovering a data constraint *after* building a model (as with `lag52` dominance in a pure time-series dataset) wastes analysis and erodes trust in the result.
+
+**2. Scope confirmation**
+> "The Scout analysis answered [X]. The Scientist analysis would answer [Y — the more ambitious question]. Are those the same question, or has the goal shifted?"
+
+**3. Opening message**
+State the mode (Data Scientist), inferred expertise level, and ask the model config question — same as a fresh project start.
+
+Only after these three questions are resolved does step 1 (Business Context) begin. The Scout output populates the memory/context section of `01_BUSINESS_CONTEXT.md` as prior context — confirmed facts only, not transferred assumptions.
 
 ### Scout guardrails (non-negotiable even in fast mode)
 
