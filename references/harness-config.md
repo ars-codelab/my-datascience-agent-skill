@@ -42,34 +42,55 @@ Your job is to challenge, not to re-run analysis.
 
 ## OpenCode
 
-**Per-agent model config** is natively supported via `.opencode/agents/` (per-project) or `~/.config/opencode/agents/` (global).
+**Per-agent model config** is natively supported via `.opencode/agents/` (per-project) or `~/.config/opencode/agents/` (global). **Local project agents override global ones** — this is the mechanism we use to ensure the adversarial reviewer runs on the right model regardless of what the user has configured globally.
 
-**Planner agent** (`planner.md`):
-```yaml
+### Setup actions (do these at project start when user confirms model config)
+
+**Step 1 — Ask which models to use:**
+> "What model should I use for the adversarial reviewer? It gets the strongest available — e.g. `anthropic/claude-opus-4-7`. What about the executor? (Or just say 'same model for all' to skip.)"
+
+**Step 2 — Write the local adversarial reviewer agent file.**
+
+Create `.opencode/agents/datascience-adversarial-reviewer.md` in the project root. This overrides any global agent with the same name:
+
+```markdown
 ---
-description: Planning agent for CRISP-DM steps 1–3 — business context, data understanding, analysis plan
-mode: subagent
+description: Adversarial reviewer for datascience-agent — challenges analysis design and results without re-running analysis. Invoked at step 3 (design review) and step 7 (results review).
 model: anthropic/claude-opus-4-7
 ---
-[Planner instructions]
+
+You are an adversarial reviewer for a data science analysis. You receive a read-only artefact package. You do not have access to the main agent's reasoning or raw data. Your job is to find problems, not to approve.
+
+For DESIGN REVIEW (artefacts: 01, 02, 03): challenge method-to-question fit, metric appropriateness for the operational output form, leakage risk (name specific fields), baseline fairness, signal timing validity, validation design, development/evaluation separation, and tie policy completeness.
+
+For RESULTS REVIEW (artefacts: outputs/ + report drafts): challenge headline numbers vs validation artefact, arithmetic (spot-check at least one figure), recommendation-to-evidence fit, confidence claims vs validation design, tie and boundary-case acknowledgement, and whether a sceptical stakeholder would accept this recommendation.
+
+Return findings as:
+## Adversarial Review — [Design | Results] — [Date]
+### Critical (blocks proceeding)
+### High (should resolve before proceeding)
+### Medium (recommended to address)
+### Low / Observations
+### Independent recomputation (results review only)
+
+State overall verdict: Approved / Approved after fixes / Blocked / Single-agent fallback — not independently verified.
 ```
 
-**Adversarial reviewer agent** (`adversarial-reviewer.md`):
-```yaml
----
-description: Adversarial reviewer — challenges analysis design and results without re-running analysis
-mode: subagent
-model: anthropic/claude-opus-4-7
----
-[See adversarial reviewer prompt below]
+**Step 3 — Record in `00_PROJECT_LOG.md`:**
+```
+Adversarial reviewer: .opencode/agents/datascience-adversarial-reviewer.md
+Model: anthropic/claude-opus-4-7
+Overrides global config: yes
 ```
 
-**Executor** uses the primary session model — no separate agent file needed unless you want to pin a model.
+**Step 4 — Invoke the reviewer at each trigger:**
+```
+@datascience-adversarial-reviewer Design review — please review 01_BUSINESS_CONTEXT.md, 02_DATA_UNDERSTANDING.md, and 03_ANALYSIS_PLAN.md. Return findings by severity.
+```
 
-**Invoking a subagent:**
-```
-@adversarial-reviewer Review the attached analysis plan for leakage, metric validity, and baseline soundness.
-```
+**If the user has no global agents configured** — the local file still works; skip the override note in the log.
+
+**If the user declines model config** — do not write the agent file. Use the primary session model for all roles. Log as `Single-agent fallback — not independently verified`.
 
 ---
 
@@ -131,10 +152,10 @@ Return findings as:
 
 ---
 
-## Detecting Harness at Runtime
+## Harness Detection
 
-The skill does not auto-detect the harness. At project start, ask:
+The skill does not auto-detect the harness. When the user confirms they want multi-model config (see SKILL.md Model Configuration), ask:
 
-> "Which harness are you running this in? (Claude Code / OpenCode / Codex / Other)"
+> "Which harness are you running in? (OpenCode / Claude Code / Codex / Other)"
 
-Then load the relevant section of this file and proceed. If the user doesn't know or doesn't care, use single-model fallback and skip model configuration.
+Then follow the setup steps for that harness above. If the user doesn't know or doesn't care, record `single-model fallback` in `00_PROJECT_LOG.md` and continue — don't block the analysis on harness setup.
