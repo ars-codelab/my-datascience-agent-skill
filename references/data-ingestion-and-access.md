@@ -62,9 +62,9 @@ Record a machine-readable metadata file beside the cache when practical:
 
 ## Data Understanding Boundary
 
-During Data Understanding, inspect enough data to establish schema, semantics, timing, quality, grain, and fitness. Do not construct the final feature set or optimize a model before `02_DATA_UNDERSTANDING.md` approval.
+**Data Scientist mode:** During Data Understanding, inspect enough data to establish schema, semantics, timing, quality, grain, and fitness. Do not construct the final feature set or optimise a model before `02_DATA_UNDERSTANDING.md` approval. Store broad profiling outputs in `outputs/diagnostics/`. Keep only material findings in the gated document.
 
-Store broad profiling outputs in `outputs/diagnostics/`. Keep only material findings in the gated document.
+**Data Scout mode:** This gate does not apply. After confirming the 1–3 ambiguities that would produce a materially wrong answer, read the data immediately and proceed to analysis. Flag data quality issues inline in the Scout output rather than in a separate document.
 
 ## Optional MCP Or Warehouse Access
 
@@ -82,7 +82,7 @@ When data access tools are available:
 
 Never treat a prior query as correct merely because it executed successfully. Verify that its business definitions match the current signed-off artifacts.
 
-## SQL Review Gate For Expert Strict
+## SQL Review Gate (Expert Mode)
 
 ```markdown
 ## SQL Review Gate
