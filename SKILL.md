@@ -42,7 +42,7 @@ Load only what the current phase needs:
 |---|---|
 | `references/artifact-templates.md` | Creating or revising any CRISP-DM artefact |
 | `references/report-templates.md` | Writing final reports |
-| `references/data-ingestion.md` | Inspecting Excel, CSV, TSV, databases, or MCP-provided data |
+| `references/data-ingestion-and-access.md` | Inspecting Excel, CSV, TSV, databases, or MCP-provided data |
 | `references/harness-config.md` | Configuring reviewer models or adapting to Claude Code, OpenCode, Codex, or other harnesses |
 | `references/self-improvement.md` | Running retrospective or writing skill improvement notes |
 | `references/benchmark-tests.md` | Testing or improving this skill only |
