@@ -4,12 +4,14 @@ Use these templates as concise checklists. Include only decision-relevant conten
 
 ## Contents
 
+These templates are for **Data Scientist mode** only. Data Scout mode produces no artefact files — see the Scout Output spec in `references/report-templates.md`.
+
 - Project log
 - Business context
 - Data understanding
 - Analysis plan
 - Data preparation
-- Modeling or analysis notes
+- Analysis notes
 - Validation and risks
 - Final review
 - Retrospective
@@ -27,12 +29,22 @@ Use these templates as concise checklists. Include only decision-relevant conten
 - Context coverage: High / Partial / Low or none
 - Memory and documentation searched:
 
-## Reviewer Configuration
+## Model Configuration
 
-| Role | Harness | Model / profile | Independence status | Fallback rule |
-|---|---|---|---|---|
-| adversarial_test |  |  | independent / same-model / fallback |  |
-| final_business_review |  |  | independent / same-model / fallback |  |
+| Role | Phase | Harness | Model / profile | Independence status | Fallback rule |
+|---|---|---|---|---|---|
+| planner | Steps 1–3 | | | — | |
+| executor | Steps 4–6 | | | — | |
+| adversarial_reviewer | Steps 3 + 7 | | | independent / same-model / fallback | |
+
+See `references/harness-config.md` for per-harness setup. If model selection is unavailable, record `single-model fallback` and label adversarial reviews accordingly.
+
+## Adversarial Review Triggers
+
+| Trigger | Artefacts reviewed | Purpose |
+|---|---|---|
+| After step 3 sign-off | `01`, `02`, `03` only | Design review — method, metric, leakage risk, baseline validity |
+| Before final report | Outputs + report drafts only | Results review — claim support, arithmetic, recommendation validity |
 
 ## Timeline
 
@@ -311,10 +323,12 @@ Specify time split, holdout, cross-validation, backtest, sensitivity checks, and
 ## Open Issues And Sign-Off
 ```
 
-## `05_MODELING_OR_ANALYSIS_NOTES.md`
+## `05_ANALYSIS_NOTES.md`
+
+Covers all analytical work types: descriptive analysis, segmentation, forecasting, causal studies, incrementality, scoring, and ML modelling. Use the section headers that apply; mark others `Not applicable`.
 
 ```markdown
-# Modeling Or Analysis Notes
+# Analysis Notes
 
 ## Dataset And Evaluation Role
 
@@ -444,8 +458,14 @@ Use the detailed review requirements in `references/review-and-retrospective.md`
 
 ## `08_RETROSPECTIVE.md`
 
+Triggered proactively by the agent after the final report is accepted. Full retrospective protocol in `references/self-improvement.md`. Output goes to two destinations — record both here before closing.
+
 ```markdown
 # Retrospective
+
+- Triggered by: agent prompt / user request
+- Date:
+- Mode: Data Scientist
 
 ## Outcome And Reference Comparison
 
@@ -458,7 +478,7 @@ Use the detailed review requirements in `references/review-and-retrospective.md`
 
 ## Failure Analysis
 
-| Failure | Consequence | Root cause | Artifact or control that should have caught it | Prevention |
+| Failure | Consequence | Root cause | Artefact or control that should have caught it | Prevention |
 |---|---|---|---|---|
 
 ## Information Gaps And Resolution
@@ -471,9 +491,15 @@ Use the detailed review requirements in `references/review-and-retrospective.md`
 | User input | Necessary? | How to make it lower effort next time |
 |---|---|---|
 
-## Reusable Context And Skill Improvements
+## Skill Improvement Notes
 
-Save only approved, anonymized, non-sensitive context.
+Flag anything generalizable — process gaps, better question phrasing, missing guardrails, gate calibration, mode improvements.
+See format in `references/self-improvement.md`. Items here are copied to `memory/skill_improvement_notes.md` after approval.
+
+## Reusable Project Context
+
+Save only approved, anonymised, non-sensitive context. Copied to `memory/reusable_context.md` after approval.
+Items: approved KPI definitions, field semantics, data quality patterns, validated analytical approaches for this domain.
 
 ## Status
 
