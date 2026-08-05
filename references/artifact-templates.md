@@ -204,6 +204,24 @@ For low-cardinality categorical fields, profile value-level target or outcome ra
 
 Minimum checks: row and entity counts, duplicate keys, missingness, ranges, invalid values, join coverage, label coverage, and time coverage.
 
+## Signal Adequacy Check (Predictive and Causal Work Only)
+
+Run this check before sign-off whenever the analytical mode is forecasting, ML modelling, scoring, causal inference, or incrementality. Skip for purely descriptive work.
+
+| Question | Finding | Decision |
+|---|---|---|
+| Does any single signal explain >80% of variance in the target? If yes, name it. | | |
+| If one signal dominates, does adding a learned model meaningfully improve on a statistical baseline (e.g. naive + drift)? | | |
+| Is there reason to believe signal-rich data exists beyond what's in this dataset — external signals, more history, higher granularity, related tables, behavioural data? | | |
+| If additional signals exist: should we source them before proceeding to the analysis plan, or is the current data sufficient for the stated business question? | | |
+
+**Gate rule:** If a dominant signal is found AND additional data plausibly exists AND the business question requires a learned model (not just a strong baseline), **do not sign off on this artefact** until the user has made an explicit decision: proceed with current data, or source additional signals first.
+
+Record the decision here:
+- `[ ]` Proceed with current data — user confirms it is sufficient for the stated question
+- `[ ]` Source additional signals before proceeding — [specify what and by when]
+- `[ ]` Revise scope — the stated question is answerable with a statistical baseline; no learned model needed
+
 ## Dataframe And Cache Record
 
 | Item | Value |
