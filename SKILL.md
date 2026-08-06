@@ -212,14 +212,19 @@ Compute what was asked. Then do one more thing the user didn't ask for: surface 
 
 ### Step 3 — Output
 
-Deliver one of:
-- An **HTML dashboard** — interactive where useful, clean layout, labelled axes, readable at a glance
-- A **chart + bullets** — if a single visual is sufficient
+Write to `scout/`:
+- `scout/code/analysis_YYYY-MM-DD.py` — self-contained Python script with data path variable at top, assumptions as comments, outputs written to `scout/output/`
+- `scout/output/dashboard_YYYY-MM-DD.html` — interactive where useful, clean layout, labelled axes, readable at a glance
+
+Also surface the dashboard inline in the conversation so the user sees it immediately without opening a file.
 
 Always include:
 - 4–6 bullet findings (what the data shows, in plain language)
 - 2–3 unsolicited observations the user didn't ask for but should know
-- One line at the top: *"Exploratory analysis — not reviewed for production use."*
+- One line at the top of the dashboard: *"Exploratory analysis — not reviewed for production use."*
+
+**Rerunability note** — tell the user once after the first Scout run:
+> "The script is in `scout/code/`. To refresh this analysis next week, update the data path at the top of the file and rerun — the new dashboard lands in `scout/output/` with today's date."
 
 ### Step 4 — Bridge to Data Scientist mode
 
@@ -250,7 +255,7 @@ Only after these three questions are resolved does step 1 (Business Context) beg
 
 1. **Confirm the metric before computing it.** "Revenue," "active," "T4W" — confirm if ambiguous from the schema. One question, inline.
 2. **Flag data quality issues that affect the headline number.** Nulls in the key field, duplicate IDs, unexpected grain — one bullet in the output, not a gate.
-3. **Label the output as exploratory.** Always. Prevents a Scout dashboard from being used as a Scientist artefact.
+3. **Label the output as exploratory.** Always — both in the HTML header and as a comment at the top of the Python script. Prevents a Scout dashboard from being used as a Scientist artefact.
 
 ---
 
@@ -285,12 +290,30 @@ Run the retrospective using `references/self-improvement.md`. Output goes to two
 
 ## Project Structure
 
-**Data Scout** produces no files or folders. Output lives in the conversation — an HTML dashboard or chart, bullet findings, and an escalation offer.
-
-**Data Scientist** creates one folder per project:
+**Data Scout** writes to a `scout/` folder within the project. The Python script is the reproducible unit — the user can rerun it against fresh data next week without starting from scratch.
 
 ```
 analysis_slug/
+  scout/
+    code/
+      analysis_YYYY-MM-DD.py    ← self-contained script; data path variable at top
+    output/
+      dashboard_YYYY-MM-DD.html ← date-stamped so reruns don't overwrite prior outputs
+```
+
+**Script conventions:**
+- Data path defined as a variable in the first few lines — one-line change to point at a new file
+- All assumptions noted as comments at the top (metric definition used, date column chosen, exclusions applied)
+- Outputs written to `scout/output/` with a date stamp
+- No external dependencies beyond pandas, matplotlib/plotly, and standard library unless the environment is known to have them
+
+**Lazy folder creation:** `scout/code/` and `scout/output/` are created only when Scout produces its first output. If the project never runs Scout mode, the folder does not exist.
+
+**Data Scientist** creates one folder per project alongside `scout/`:
+
+```
+analysis_slug/
+  scout/                        ← Scout runs (reusable scripts + dated HTML outputs)
   00_PROJECT_LOG.md
   01_BUSINESS_CONTEXT.md
   02_DATA_UNDERSTANDING.md
@@ -309,7 +332,7 @@ analysis_slug/
     skill_improvement_notes.md
 ```
 
-**Lazy folder creation:** do not create `data/`, `code/`, `outputs/`, or subdirectories until a file is actually written there. The project log notes the intended structure; folders materialise on demand.
+**Lazy folder creation:** do not create `data/`, `code/`, `outputs/`, `reports/`, or subdirectories until a file is actually written there. The project log notes the intended structure; folders materialise on demand.
 
 ---
 
