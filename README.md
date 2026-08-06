@@ -97,43 +97,77 @@ datascience-agent/
   references/
     artifact-templates.md           ← CRISP-DM artefact templates and sign-off blocks
     report-templates.md             ← business and technical report templates
-    data-ingestion-and-access.md    ← reading Excel, CSV, databases, MCP sources
-    harness-config.md               ← per-harness model config + adversarial reviewer prompt
-    self-improvement.md             ← retrospective protocol and contribution guide
-    benchmark-tests.md              ← test cases for evaluating skill quality
+    data-ingestion-and-access.md  ← reading Excel, CSV, databases, MCP sources
+    harness-config.md              ← per-harness model config + adversarial reviewer prompt
+    self-improvement.md            ← retrospective protocol and contribution guide
+    benchmark-tests.md             ← test cases for evaluating skill quality
 ```
 
 Each reference file is loaded on demand — only when the current phase needs it. The main `SKILL.md` stays in context throughout.
 
 ---
 
-## Getting Started
+## Recommended Setup — Harness and MCPs
 
-### Using the skill in Claude Code
+This skill is designed for a modern AI coding harness (Claude Code, OpenCode, or Codex CLI) connected to the tools your team already uses. The harness handles model routing and agent invocation. The MCPs extend what the agent can see and do.
+
+### Harness
+
+| Harness | Notes |
+|---|---|
+| **OpenCode** | Full support — per-agent model config, local agent file for adversarial reviewer, MCP connections |
+| **Claude Code** | Full support — subagent model config via frontmatter, MCP connections |
+| **Codex CLI** | Supported — single model per session; adversarial review runs in a separate session |
+
+See `references/harness-config.md` for setup instructions for each.
+
+### Knowledge Base MCPs (connect these for richer context)
+
+At project start the agent searches connected knowledge tools before asking clarifying questions — pulling existing metric definitions, prior analyses, and data dictionaries so you don't have to retype context you already have.
+
+Useful knowledge MCPs to connect: **Notion, Confluence, Google Drive, SharePoint**, or any internal documentation server your team uses.
+
+### Data MCPs (extension point)
+
+Connecting the agent to live data sources is a powerful extension but requires environment-specific configuration — permissions, query costs, and schema conventions vary. The core skill works with files you attach (CSV, Excel, data exports). Data connector support is an extension point for your fork.
+
+When you're ready to add it, the provenance and validation standards in `references/data-ingestion-and-access.md` define the contract any connector must meet.
+
+Data sources worth connecting in your environment: **Snowflake, BigQuery, Redshift, Databricks, dbt, Looker, Mode, Athena**.
+
+---
+
+## Getting Started
 
 ```bash
 # Clone the repo
-git clone [https://github.com/ars-codelab/my-datascience-agent-skill](https://github.com/ars-codelab/my-datascience-agent-skill)
-
-# Add SKILL.md to your project's .claude/skills/ directory, or reference it directly
-cp datascience-agent/SKILL.md .claude/skills/datascience-agent.md
+git clone https://github.com/ars-codelab/my-datascience-agent-skill
+cd my-datascience-agent-skill
 ```
 
-Then start a session and say: *"Run the data science skill. Here's my question: [your business question]."*
-
-### Using in OpenCode
+### Claude Code
 
 ```bash
-cp datascience-agent/SKILL.md ~/.config/opencode/skills/datascience-agent.md
+cp SKILL.md .claude/skills/datascience-agent.md
 ```
 
-### Using in Codex CLI
+Start a session and say: *"Run the data science skill. Here's my question: [your business question]."*
 
-Reference the skill file at session start:
+### OpenCode
 
 ```bash
-codex --system-prompt "$(cat datascience-agent/SKILL.md)" "Here's my analysis question: ..."
+cp SKILL.md ~/.config/opencode/skills/datascience-agent.md
 ```
+
+For adversarial reviewer setup (recommended), follow the per-project agent file instructions in `references/harness-config.md`.
+
+### Codex CLI
+
+```bash
+codex --system-prompt "$(cat SKILL.md)" "Here's my analysis question: ..."
+```
+
+For adversarial review, open a separate Codex session at your strongest available model and pass it the artefact package manually. See `references/harness-config.md`.
 
 ---
 
@@ -216,7 +250,7 @@ See `references/self-improvement.md` for the full contribution guide and PR tagg
 
 ## Contributing
 
-PRs welcome. One change per PR. Include the retrospective note that motivated the change and describe what was broken without it.
+PRs welcome at [github.com/ars-codelab/my-datascience-agent-skill](https://github.com/ars-codelab/my-datascience-agent-skill). One change per PR. Include the retrospective note that motivated the change and describe what was broken without it.
 
 Tag your PR: `mode:guided` · `mode:expert` · `gate` · `question-quality` · `harness` · `scientific-guardrail` · `self-improvement`
 
