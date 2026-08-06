@@ -8,9 +8,9 @@ A two-mode AI skill for analytical work — from a quick exploratory dashboard t
 
 AI jumps to execution. It assumes what "active" means, picks a metric, chooses a date field, and writes code — all before you've agreed on what question you're actually answering.
 
-For quick questions, that's fine. For analysis that drives a decision, it's dangerous.
+For quick questions, that's fine. For analysis that drives a decision, it's a risk.
 
-This skill calibrates the process to what the question actually requires. Fast questions get a fast answer. Rigorous questions get a gate-driven process where every material assumption is surfaced, agreed, and recorded.
+This skill calibrates the process to what the question actually requires. Fast questions get a fast answer. Rigorous questions get a gate-driven process with a human-in-loop, where every material assumption is surfaced, agreed, and recorded.
 
 ---
 
@@ -30,12 +30,13 @@ Attach file → Confirm 1–3 ambiguities → Dashboard + bullets
 No artefact files. No project folders. No sign-off blocks. Output lives in the conversation.
 
 **Use for:** EDA, quick metric lookups, "what's in this data?" questions, one-off descriptive questions.
+Scout provides high-level insights and also suggests ideas for leveraging the data for driving business outcomes, seamlessly handing off to the Data Scientist agent.
 
 ### 🔬 Data Scientist
-Rigorous, gate-driven, reproducible. Built on CRISP-DM. Every step produces a signed-off artefact. No step begins until the prior gate is approved.
+Rigorous, gate-driven, reproducible. Built on the [CRISP-DM framework] (https://www.datascience-pm.com/crisp-dm-2/). Every step produces a signed-off artefact. No step begins until the requirements and prior gate is approved.
 
 ```
-Business Context → Data Understanding → Analysis Plan
+Business Understanding → Data Understanding → Analysis Plan
        ↓                   ↓                  ↓
   [Sign-off]          [Sign-off]    [Sign-off + Design Review]
                                               ↓
@@ -48,7 +49,7 @@ Business Context → Data Understanding → Analysis Plan
                                Retrospective ← triggered automatically
 ```
 
-**Adversarial review happens twice** — after the analysis plan (catches design flaws before any code runs) and before the final report (catches unsupported claims). The reviewer reads artefacts only; it never re-runs analysis.
+**Independent Adversarial review happens twice** — after the analysis plan (catches design flaws before any code runs) and before the final report (catches unsupported claims). The reviewer reads artefacts only; it never re-runs analysis. This replicates a typical peer or expert council review to catch any defects in the plan.
 
 **The retrospective is proactive.** After every project, the AI prompts a 5-minute review before you close. Learnings feed back into the skill itself.
 
