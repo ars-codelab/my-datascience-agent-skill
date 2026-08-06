@@ -33,7 +33,7 @@ No artefact files. No project folders. No sign-off blocks. Output lives in the c
 Scout provides high-level insights and also suggests ideas for leveraging the data for driving business outcomes, seamlessly handing off to the Data Scientist agent.
 
 ### 🔬 Data Scientist
-Rigorous, gate-driven, reproducible. Built on the [CRISP-DM framework] (https://www.datascience-pm.com/crisp-dm-2/). Every step produces a signed-off artefact. No step begins until the requirements and prior gate is approved.
+Rigorous, gate-driven, reproducible. Built on the [CRISP-DM framework](https://www.datascience-pm.com/crisp-dm-2/). Every step produces a signed-off artefact. No step begins until the requirements and prior gate is approved.
 
 ```
 Business Understanding → Data Understanding → Analysis Plan
