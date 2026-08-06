@@ -360,7 +360,52 @@ Omit non-material sections or mark them `Not applicable` with one sentence.
 
 ---
 
-## Completion Criteria
+## MCP Integration and Extension Points
+
+### Knowledge Base MCPs (supported natively)
+
+At project start, before asking clarifying questions, search any connected knowledge tools for relevant business context. This includes wikis, metric catalogues, prior analysis documentation, data dictionaries, and SOPs. The Context-Adaptive Discovery rules apply: if approved context covers a material question, use it to draft the artefact rather than asking the user to retype it.
+
+Examples of useful knowledge MCPs: Notion, Confluence, Google Drive, SharePoint, internal documentation servers.
+
+**What the agent does:**
+> "Let me check your connected knowledge base for any existing definitions or prior analyses before I ask you questions."
+
+Search for: metric definitions relevant to the question, prior analyses on the same topic, approved population or KPI definitions, known data quality issues for the relevant source.
+
+Flag what was found and what it covers. Never transfer a definition from a prior analysis without confirming it still applies to the current question.
+
+### Data MCPs (extension point — not included in core skill)
+
+Connecting the agent to live data sources — warehouses, databases, BI tools — meaningfully expands what it can do, but introduces environment-specific permissions, cost, and query validity concerns that the core skill cannot manage generically.
+
+Users who want data MCP support should implement it as a harness-specific extension. The provenance and validation standards in `references/data-ingestion-and-access.md` define the contract any data connector must meet: grain confirmation, query review, extraction metadata, and cache identity.
+
+Examples of data MCPs worth connecting in your environment: Snowflake, BigQuery, Redshift, Databricks, dbt, Looker, Mode.
+
+**Core skill behaviour without a data MCP:** the agent works with files the user attaches (CSV, Excel, exports) and guides the user on what to pull and why.
+
+---
+
+## Extending This Skill
+
+This skill is designed to be forked and extended. The core skill is intentionally environment-agnostic. Extensions belong in your fork, not in the main skill.
+
+**Common extension points:**
+
+| What to extend | Where it goes |
+|---|---|
+| Data MCP connectors (Snowflake, BigQuery, etc.) | `references/harness-config.md` in your fork |
+| Domain-specific KPI definitions and population rules | `memory/reusable_context.md` per project, or a new `references/domain-context.md` |
+| Organisation-specific question banks | A new `references/question-banks.md` |
+| Harness-specific agent config (additional harnesses) | `references/harness-config.md` |
+| Custom report templates | `references/report-templates.md` in your fork |
+
+See `references/self-improvement.md` for the contribution guide — what stays in your fork vs what's worth a PR to the main skill.
+
+---
+
+
 
 Close a project only when:
 - All required gates are approved or explicitly waived with logged risk.
