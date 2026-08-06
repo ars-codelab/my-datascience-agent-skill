@@ -1,84 +1,102 @@
-# A Trustable Data Science Agent
+# An AI Data Science Agent for Knowledge Workers
 
-From a quick exploratory analysis to a rigorous causal study. The agent reads your request, clarifies your requirements, proposes the right mode, and matches the process to the stakes.
+Most business teams don't have a dedicated data scientist. In markets like Japan, top-tier data talent is genuinely scarce. Meanwhile, the decisions that need analytical rigour — forecasting, causal inference, incrementality, churn prediction — don't wait for headcount.
+
+This is a personal data science agent for knowledge workers: PMs, marketers, supply chain specialists, and anyone who needs to go deeper than a dashboard but doesn't have a data scientist on call. It guides you through the full analytical process, clarifies before assuming, and involves you at the right moments — not constantly, not never.
+
+> Built on five principles: systematic process, human-in-the-loop, domain-first context, adversarial peer review, and self-improvement. The same principles you'd apply to onboarding a human analyst.
 
 ---
 
-## The Problem This Solves
+## The Problem
 
-AI jumps to execution. It assumes what "active" means, picks a metric, chooses a date field, and writes code — all before you've agreed on what question you're actually answering.
+AI jumps to execution. It assumes what "active" means, picks a metric, chooses a date field, and writes code — all before you've agreed on what question you're answering. For quick questions, that's fine. For analysis that drives a decision, it's a risk.
 
-For quick questions, that's fine. For analysis that drives a decision, it's a risk.
+Two problems show up consistently:
 
-This skill calibrates the process to what the question actually requires. Fast questions get a fast answer. Rigorous questions get a gate-driven process with a human-in-loop, where every material assumption is surfaced, agreed, and recorded.
+**Unchecked enthusiasm.** Ask "why did my traffic drop?" and the LLM immediately makes unverified assumptions, writes hundreds of lines of code, and outputs a convincing story. Reviewing the reasoning and execution chain takes time. Most users trust the first output.
+
+**The evaluation problem.** Complex questions like "how much inventory should we stock?" don't have a verifiable ground truth. The answer depends on assumptions, and trust has to be earned through backtesting and real-world validation. How do you evaluate AI outputs when there's no answer key?
+
+These are the same challenges you face when onboarding a human analyst. We de-risk human work through structure, coaching, peer review, and validation. This agent applies the same principles to AI.
 
 ---
 
 ## Two Modes
 
+The agent reads your request and proposes the right mode. You can always override.
+
 ### 🔍 Data Scout
-Fast, visual, conversation-driven. Attach a file, ask a question, get a dashboard and findings in minutes.
+Fast, visual, conversation-driven. Attach a file, ask a question, get a dashboard and findings in minutes. No gate documents, no sign-off blocks.
 
 ```
-Attach file → Confirm 1–3 ambiguities → Dashboard + bullets
-                                               ↓
-                              2–3 unsolicited observations
-                                               ↓
-                         "Here's what this hints at if you want to go deeper..."
+Attach file → Confirm 1–3 ambiguities → Dashboard + findings
+                        ↓
+           2–3 unsolicited observations
+                        ↓
+     "Here's what this hints at if you want to go deeper..."
 ```
 
-No sign-off blocks. Output and scripts lives in the scout/ and can be reused when the dataset gets updated (e.g. weekly sales data)
+Scripts live in `scout/code/` and can be rerun when the dataset updates — point them at next week's file and the dashboard refreshes. Scout also brainstorms ideas for how the data could drive business outcomes, and hands off seamlessly to Data Scientist when the question warrants it.
 
-**Use for:** EDA, quick metric lookups, "what's in this data?" questions, one-off descriptive questions.
-Scout provides high-level insights and also suggests ideas for leveraging the data for driving business outcomes, seamlessly handing off to the Data Scientist agent.
-User can also consult, brainstorm and iterate the analysis with scout.
+**Use for:** EDA, quick metric lookups, "what's in this data?", one-off descriptive questions.
 
 ### 🔬 Data Scientist
-Rigorous, gate-driven, reproducible. Built on the [CRISP-DM framework](https://www.datascience-pm.com/crisp-dm-2/). Every step produces a signed-off artifact. No step begins until the requirements and prior gate is approved.
+Rigorous, gate-driven, reproducible. Built on [CRISP-DM](https://www.datascience-pm.com/crisp-dm-2/). Every step produces a signed-off artefact. No step begins until the prior gate is approved.
 
 ```
 Business Understanding → Data Understanding → Analysis Plan
-       ↓                   ↓                  ↓
-  [Sign-off]          [Sign-off]    [Sign-off + Design Review]
-                                              ↓
-                              Data Prep → Analysis → Validation
-                                              ↓
-                                    [Results Review]
-                                              ↓
-                                      Final Report
-                                              ↓
-                               Retrospective ← triggered automatically
+         ↓                       ↓                  ↓
+    [Sign-off]             [Sign-off]    [Sign-off + Design Review]
+                                                    ↓
+                                Data Prep → Analysis → Validation
+                                                    ↓
+                                          [Results Review]
+                                                    ↓
+                                            Final Report
+                                                    ↓
+                                     Retrospective ← triggered automatically
 ```
 
-**Independent Adversarial review happens twice** — after the analysis plan (catches design flaws before any code runs) and before the final report (catches unsupported claims). The reviewer reads artefacts only; it never re-runs analysis. This replicates a typical peer or expert council review to catch any defects in the plan.
+**Adversarial review happens twice** — after the analysis plan (before any code runs) and before the final report (before any claims are published). An independent agent with a stronger model challenges the design and findings. This replicates a peer or expert council review. The reviewer reads artefacts only; it never re-runs analysis.
 
-**The retrospective is proactive.** After every project, the AI prompts a 5-minute review before you close. Learnings feed back into the skill itself.
+**The retrospective is proactive.** After every project, the agent prompts a short review. Learnings feed back into the skill itself.
 
 **Use for:** causal studies, incrementality, A/B analysis, attribution, churn prediction, ML models, statistical forecasting, scoring, and any analysis that drives or automates a decision.
 
-### The agent proposes — you decide
+### How the agent decides
 
-The agent reads your request and proposes a mode using two questions: *Will this drive or automate a decision? Is there a causal or predictive claim?* If yes to either → Data Scientist. Otherwise → Data Scout, with an offer to escalate.
-
-You can always override: say *"switch modes"* at any point.
+Two questions: *Will this output drive or automate a decision? Is there a causal or predictive claim?* Yes to either → Data Scientist. Otherwise → Data Scout, with a bridge offer to go deeper.
 
 ---
 
-## Expertise Levels (Both Modes)
+## Five Design Principles
 
-| Level | Who it's for |
-|---|---|
-| **Guided** | Non-specialists or first-time users. AI fills in reasonable defaults, explains every choice in plain language, asks 1–2 questions at a time. Inferred from how the user writes. |
-| **Collaborative** | Practitioners who want to stay in control. AI presents options with tradeoffs and a recommended path. Default. |
-| **Expert** | Experienced data scientists. Concise, technical, reproducibility and review gates active by default. |
+| | Principle | What it prevents |
+|---|---|---|
+| ⚙️ | **Systematic process** | Follows CRISP-DM. Clarifies requirements, validates data, and secures sign-off at each stage before writing code. | AI executing on a poorly framed question |
+| 🧠 | **Human-in-the-loop** | Pauses at gates where business judgment is required. Adapts to your technical level via three expertise modes. | Both extremes: constant interruption and full autonomy |
+| 📚 | **Domain-first context** | Searches your knowledge base and past analyses before asking questions. Context before computation. | Technically correct answers to the wrong question |
+| 🥊 | **Adversarial peer review** | Invokes an independent agent with a stronger model at two checkpoints. Its job is to falsify, not approve. | Leaky features, unsupported claims, overconfident results |
+| 🔄 | **Self-improvement** | Proactive retrospective after every project. Learnings written back into the skill. | Repeating the same mistakes across projects |
 
-The agent infers the level from the conversation — you don't need to declare it.
+---
+
+## Expertise Levels
+
+The agent infers your level from the conversation. No need to declare it.
+
+| Level | Who it's for | How it behaves |
+|---|---|---|
+| **Guided** | Non-specialists, first-time users | Plain language, fills in sensible defaults, 1–2 questions at a time |
+| **Collaborative** | Practitioners who want to stay in control | Options with tradeoffs, recommended path, invitation to push back. Default. |
+| **Expert** | Experienced data scientists | Concise, technical, reproducibility and review gates fully active |
 
 ---
 
 ## Multi-Model Architecture (Optional)
 
-If your harness supports per-agent model selection, you can assign different models to different roles — spending more on thinking, less on execution.
+Spend more on thinking, less on execution. Assign different models to different roles when your harness supports it.
 
 | Role | Phase | Suggested tier |
 |---|---|---|
@@ -86,84 +104,51 @@ If your harness supports per-agent model selection, you can assign different mod
 | **Executor** | Data prep, analysis, validation | Mid-tier |
 | **Adversarial Reviewer** | Design review + results review | Strongest available |
 
-Supported out of the box on Claude Code and OpenCode. Codex CLI falls back gracefully to a separate session for adversarial review. See `references/harness-config.md` for setup.
+Fully supported on Claude Code and OpenCode. Codex CLI falls back to a separate session for adversarial review. See `references/harness-config.md` for setup.
 
 ---
 
-## Repository Structure
+## Getting Started
 
-```
-datascience-agent/
-  SKILL.md                          ← main skill instructions (load this)
-  README.md                         ← you are here
-  references/
-    artifact-templates.md           ← CRISP-DM artefact templates and sign-off blocks
-    report-templates.md             ← business and technical report templates
-    data-ingestion-and-access.md  ← reading Excel, CSV, databases, MCP sources
-    harness-config.md              ← per-harness model config + adversarial reviewer prompt
-    self-improvement.md            ← retrospective protocol and contribution guide
-    benchmark-tests.md             ← test cases for evaluating skill quality
-```
+This agent is designed for modern AI coding harnesses that support local file creation. Start a new project in Codex, Claude Code, OpenCode, or Cowork and say:
 
-Each reference file is loaded on demand — only when the current phase needs it. The main `SKILL.md` stays in context throughout.
+> *"Install the skill from https://github.com/ars-codelab/my-datascience-agent-skill"*
+
+Then restart the session and say:
+
+> *"Run the data science skill. Here's my question: [your business question]."*
+
+For adversarial reviewer setup, follow the per-project agent file instructions in `references/harness-config.md`. For a quick fallback, open a separate session, switch to a stronger model, and pass it the artefact package manually.
 
 ---
 
-## Recommended Setup — Harness and MCPs
+## Connecting Your Stack
 
-This skill is designed for a modern AI coding harness (Claude Code, OpenCode, or Codex CLI) connected to the tools your team already uses. The harness handles model routing and agent invocation. The MCPs extend what the agent can see and do.
+### Knowledge Base MCPs (recommended)
 
-### Harness
+The agent searches connected knowledge tools at project start — pulling existing metric definitions, prior analyses, and data dictionaries before asking you to retype them.
 
-| Harness | Notes |
-|---|---|
-| **OpenCode** | Full support — per-agent model config, local agent file for adversarial reviewer, MCP connections |
-| **Claude Code** | Full support — subagent model config via frontmatter, MCP connections |
-| **Codex CLI** | Supported — single model per session; adversarial review runs in a separate session |
-
-See `references/harness-config.md` for setup instructions for each.
-
-### Knowledge Base MCPs (connect these for richer context)
-
-At project start the agent searches connected knowledge tools before asking clarifying questions — pulling existing metric definitions, prior analyses, and data dictionaries so you don't have to retype context you already have.
-
-Useful knowledge MCPs to connect: **Notion, Confluence, Google Drive, SharePoint**, or any internal documentation server your team uses.
+Connect: **Notion, Confluence, Google Drive, SharePoint**, or any internal documentation server.
 
 ### Data MCPs (extension point)
 
-Connecting the agent to live data sources is a powerful extension but requires environment-specific configuration — permissions, query costs, and schema conventions vary. The core skill works with files you attach (CSV, Excel, data exports). Data connector support is an extension point for your fork.
+Data connector support requires environment-specific configuration and is an extension point for your fork. The core skill works with files you attach (CSV, Excel, exports). When you're ready to extend it, `references/data-ingestion-and-access.md` defines the standards any connector must meet.
 
-When you're ready to add it, the provenance and validation standards in `references/data-ingestion-and-access.md` define the contract any connector must meet.
-
-Data sources worth connecting in your environment: **Snowflake, BigQuery, Redshift, Databricks, dbt, Looker, Mode, Athena**.
-
----
-
-## Easiest way to getting started
-
-Start a new project on Codex, Claude Code, OpenCode or Cowork, and say:
-*"Install the skill locally (or globally) from https://github.com/ars-codelab/my-datascience-agent-skill "*
-
-## Starting a new analysis
-After the skill is installed, restart the session and say: *"Run the data science skill. Here's my question: [your business question]."*
-
-
-## For adversarial reviewer setup (recommended)
-
-Follow the per-project agent file instructions in `references/harness-config.md`.
-Multi agent setups are harness dependent.
-For fall back, open a separate session. Switch to a stronger model and pass it the artefact package manually. See `references/harness-config.md`.
+Worth connecting in your environment: **Snowflake, BigQuery, Redshift, Databricks, dbt, Looker, Mode, Athena**.
 
 ---
 
 ## What Gets Created Per Project
 
-Each project lives in its own folder. Folders are created lazily — only when a file is actually written there.
+Folders are created lazily — only when a file is actually written there.
 
 ```
 analysis_slug/
-  00_PROJECT_LOG.md          ← mode, model config, gate waivers, violations
-  01_BUSINESS_CONTEXT.md     ← decision, KPI, scope, constraints [sign-off required]
+  scout/
+    code/                    ← reusable Python scripts, one per Scout run
+    output/                  ← date-stamped HTML dashboards
+  00_PROJECT_LOG.md          ← mode, model config, gate waivers
+  01_BUSINESS_CONTEXT.md     ← decision, KPI, scope [sign-off required]
   02_DATA_UNDERSTANDING.md   ← column inventory, semantics, fitness [sign-off required]
   03_ANALYSIS_PLAN.md        ← method, metrics, validation design [sign-off + design review]
   04_DATA_PREPARATION.md     ← transformations, row impact, feature logic
@@ -184,52 +169,28 @@ analysis_slug/
 
 ## The Self-Improvement Loop
 
-This skill is designed to get better with use.
+After every project, the agent proactively prompts a short retrospective. Findings go to two places:
 
-After every project, the AI proactively prompts a short retrospective. Findings go to two places:
-
-- **`memory/reusable_context.md`** — project-local. Approved KPI definitions, field semantics, data quality patterns. Reused in future analyses in this repo.
-- **`memory/skill_improvement_notes.md`** — accumulates across projects. Process gaps, better question phrasing, missing guardrails. This is your backlog for improving the skill.
+- **`memory/reusable_context.md`** — project-local. Approved KPI definitions, field semantics, data quality patterns. Reused in future analyses.
+- **`memory/skill_improvement_notes.md`** — accumulates across projects. Process gaps, better question phrasing, missing guardrails. Your backlog for improving the skill.
 
 ### Fork → improve → contribute
 
 ```
-Fork this repo
-    ↓
-Run projects, collect retrospective notes in skill_improvement_notes.md
-    ↓
-Edit your local SKILL.md or references/ based on what you've learned
-    ↓
-Test on the next project
-    ↓
-If the improvement is generalizable → open a PR
+Fork → run projects → collect notes in skill_improvement_notes.md
+              ↓
+  Edit your local SKILL.md or references/ based on learnings
+              ↓
+         Test on the next project
+              ↓
+  If it generalises → open a PR
 ```
 
-**What stays in your fork:** domain-specific KPI definitions, org-specific data quality patterns, question options tuned to your team's vocabulary, harness config for your setup.
+**Keep in your fork:** domain-specific KPI definitions, org-specific data quality patterns, harness config for your setup.
 
-**What's worth a PR:** fixes to questions that were ambiguous across domains, missing scientific guardrails, gate calibration improvements, Guided mode improvements for less experienced users, new harness support.
+**Worth a PR:** fixes to ambiguous questions, missing scientific guardrails, gate calibration improvements, Guided mode improvements, new harness support.
 
 See `references/self-improvement.md` for the full contribution guide and PR tagging conventions.
-
----
-
-## Design Principles
-
-**Match the process to the stakes.** A T4W revenue question doesn't need a gate document. A churn model does. The agent proposes the right mode rather than defaulting to maximum rigour or minimum effort.
-
-**Clarify before assuming.** Undefined terms — `active`, `churned`, `conversion`, `high value` — are never silently translated into code. In Scout mode: 1–3 inline questions, only the ones that would break the answer. In Scientist mode: full clarification at each gate.
-
-**The agent has a voice.** When the data can't support the question, the agent says so — specifically, calmly, and with an honest alternative. Silently computing a weaker answer without flagging the limitation is the failure mode this skill is designed to prevent.
-
-**Gate before executing (Scientist mode).** No data exploration until business context is signed off. No feature engineering until data understanding is signed off. No report writing until adversarial review is clean.
-
-**Artefacts are decision surfaces, not data dumps.** The business context document is 300–500 words. The analysis plan is 600–900 words. Detailed evidence lives in `outputs/` — the gated artefacts stay readable.
-
-**Adversarial review is scoped, not redundant.** The reviewer gets a read-only artefact package. It challenges and returns structured findings. It does not re-run analysis. The expensive model is used for thinking, not for repeating work.
-
-**Scout always bridges to Scientist.** Every Scout output closes with observations the data raised that would take a proper analysis to answer. The escalation is earned by the data, not manufactured.
-
-**The retrospective closes the loop.** Learnings don't disappear into chat history. They're written to files that persist, accumulate, and feed back into the skill.
 
 ---
 
@@ -239,10 +200,10 @@ PRs welcome at [github.com/ars-codelab/my-datascience-agent-skill](https://githu
 
 Tag your PR: `mode:guided` · `mode:expert` · `gate` · `question-quality` · `harness` · `scientific-guardrail` · `self-improvement`
 
-Open an issue first for anything that touches the non-negotiable rules or gate structure — those changes benefit from discussion before implementation.
+Open an issue first for anything that touches the gate structure or non-negotiable rules.
 
 ---
 
 ## License
 
-MIT
+MIT · Anoj Sundar · Framework and Engineering Design
