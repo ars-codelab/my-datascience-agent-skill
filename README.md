@@ -1,6 +1,6 @@
-# Systematic Data Science Agent
+# A Trustable Data Science Agent
 
-A two-mode AI skill for analytical work — from a quick exploratory dashboard to a rigorous causal study. The agent reads your request, proposes the right mode, and matches the process to the stakes.
+From a quick exploratory analysis to a rigorous causal study. The agent reads your request, clarifies your requirements, proposes the right mode, and matches the process to the stakes.
 
 ---
 
@@ -34,7 +34,7 @@ Scout provides high-level insights and also suggests ideas for leveraging the da
 User can also consult, brainstorm and iterate the analysis with scout.
 
 ### 🔬 Data Scientist
-Rigorous, gate-driven, reproducible. Built on the [CRISP-DM framework](https://www.datascience-pm.com/crisp-dm-2/). Every step produces a signed-off artefact. No step begins until the requirements and prior gate is approved.
+Rigorous, gate-driven, reproducible. Built on the [CRISP-DM framework](https://www.datascience-pm.com/crisp-dm-2/). Every step produces a signed-off artifact. No step begins until the requirements and prior gate is approved.
 
 ```
 Business Understanding → Data Understanding → Analysis Plan
@@ -139,37 +139,20 @@ Data sources worth connecting in your environment: **Snowflake, BigQuery, Redshi
 
 ---
 
-## Getting Started
+## Easiest way to getting started
 
-```bash
-# Clone the repo
-git clone https://github.com/ars-codelab/my-datascience-agent-skill
-cd my-datascience-agent-skill
-```
+Start a new project on Codex, Claude Code, OpenCode or Cowork, and say:
+*"Install the skill locally (or globally) from https://github.com/ars-codelab/my-datascience-agent-skill "*
 
-### Claude Code
+## Starting a new analysis
+After the skill is installed, restart the session and say: *"Run the data science skill. Here's my question: [your business question]."*
 
-```bash
-cp SKILL.md .claude/skills/datascience-agent.md
-```
 
-Start a session and say: *"Run the data science skill. Here's my question: [your business question]."*
+## For adversarial reviewer setup (recommended)
 
-### OpenCode
-
-```bash
-cp SKILL.md ~/.config/opencode/skills/datascience-agent.md
-```
-
-For adversarial reviewer setup (recommended), follow the per-project agent file instructions in `references/harness-config.md`.
-
-### Codex CLI
-
-```bash
-codex --system-prompt "$(cat SKILL.md)" "Here's my analysis question: ..."
-```
-
-For adversarial review, open a separate Codex session at your strongest available model and pass it the artefact package manually. See `references/harness-config.md`.
+Follow the per-project agent file instructions in `references/harness-config.md`.
+Multi agent setups are harness dependent.
+For fall back, open a separate session. Switch to a stronger model and pass it the artefact package manually. See `references/harness-config.md`.
 
 ---
 
