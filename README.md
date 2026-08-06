@@ -27,10 +27,11 @@ Attach file → Confirm 1–3 ambiguities → Dashboard + bullets
                          "Here's what this hints at if you want to go deeper..."
 ```
 
-No artefact files. No project folders. No sign-off blocks. Output lives in the conversation.
+No sign-off blocks. Output and scripts lives in the scout/ and can be reused when the dataset gets updated (e.g. weekly sales data)
 
 **Use for:** EDA, quick metric lookups, "what's in this data?" questions, one-off descriptive questions.
 Scout provides high-level insights and also suggests ideas for leveraging the data for driving business outcomes, seamlessly handing off to the Data Scientist agent.
+User can also consult, brainstorm and iterate the analysis with scout.
 
 ### 🔬 Data Scientist
 Rigorous, gate-driven, reproducible. Built on the [CRISP-DM framework](https://www.datascience-pm.com/crisp-dm-2/). Every step produces a signed-off artefact. No step begins until the requirements and prior gate is approved.
